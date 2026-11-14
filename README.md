@@ -1,13 +1,3 @@
-<!--
-  NOTE FOR THE TEAM (delete before submitting):
-  Every value marked TODO is a placeholder. Fill it ONLY from real deployments,
-  real tx hashes and real script output. Never ship invented numbers — judges
-  check Reactscan and the explorers.
--->
-
-<p align="center">
-  <img src="assets/hedgeline-banner.svg" alt="Hedgeline — the LP hedge that never sleeps" width="100%"/>
-</p>
 
 <h1 align="center">Hedgeline</h1>
 <p align="center"><b>The LP hedge that never sleeps.</b><br/>
