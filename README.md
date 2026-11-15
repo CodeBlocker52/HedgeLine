@@ -234,11 +234,13 @@ The band `τ` stops the system from trading on noise. The notional gate stops it
 ### 4. Margin guard
 
 ```
-marginRatio = (collateral + unrealizedPnL) / (|size| · markPrice)
+marginRatio = (collateral + unrealizedPnL + funding) / (|size| · markPrice)
 
 marginRatio < m_warn   → protectMargin(STEP_DOWN): h ← h − Δh, or top up from reserve
 marginRatio < m_crit   → protectMargin(CUT):       h ← h_floor immediately
 ```
+
+`funding` is the short's accrued funding from `MiniPerp`'s cumulative funding index (positive when the rate pays shorts).
 
 ### 5. Why hedging matters: LVR
 
@@ -256,7 +258,7 @@ The buildathon asks for latency **across the full loop**. Every hedge callback c
 
 **Measured loop:** origin event (Base swap *or* Unichain vault change) → Reactive Lasna → callback → short resized on Base Sepolia.
 
-> Timestamp resolution differs by chain. Hops that touch a whole-second chain are reported ±1 s. A watcher script also records wall-clock times from receipts as a cross-check.
+> Timestamp resolution differs by chain. `block.timestamp` is whole seconds everywhere, including Base Sepolia, where about five 200 ms blocks share one timestamp. Latency from chain timestamps is therefore reported ±1 s. `scripts/latency.ts` also reports an **estimated sub-second** figure from each block's position within its second (`timestamp + 0.2 s × position`), and a watcher script records wall-clock times from receipts as a cross-check.
 
 | Trigger | Samples | Median | p95 | Max |
 |---|---|---|---|---|
@@ -317,7 +319,7 @@ contract HedgelineReactive is AbstractReactive {
 | AMM | **Uniswap v4** (`v4-core`, `v4-periphery`) on **Unichain Sepolia** and **Base Sepolia** |
 | Hedge venue | `MiniPerp` on **Base Sepolia** (200 ms blocks) |
 | Contracts | Solidity, **Foundry** (forge, cast, anvil), Solady |
-| Scripts | TypeScript, **viem**, Node.js 20 |
+| Scripts | TypeScript, **viem**, Node.js ≥ 22.18 (native TypeScript, no build step) |
 | Dashboard | Next.js, wagmi, viem, Recharts (read-only, no wallet needed to view) |
 | CI | GitHub Actions: `forge build --sizes`, `forge test` |
 
@@ -378,13 +380,13 @@ Scenario 3 matters as much as the others. It shows the reactive contract making 
 - **Unit tests** for `DeltaMath`, band logic, notional gate, nonce handling, margin thresholds and `MiniPerp` accounting.
 - **Delta cross-check:** `DeltaMath` is asserted equal to Uniswap's `SqrtPriceMath.getAmount0Delta` across the tick range, and fuzzed.
 - **In-process loop simulation:** recorded origin logs are fed to `react()` as the system contract would deliver them; requested callbacks are delivered through a mock callback proxy that injects the reactive contract's address as the first argument. This tests the whole decision loop without a live network.
-- **Invariant tests:** the hedger never applies a stale nonce, `|short| ≤ h_max · Σ delta`, and collateral never goes negative without a liquidation event.
+- **Invariant tests:** the hedger never applies a stale nonce, `|short| ≤ maxShortWad`, no single callback moves the short by more than `maxStepWad`, and collateral never goes negative without a liquidation event.
 - **Fork tests** against the live Unichain Sepolia and Base Sepolia PoolManagers.
 - **Totals:** TODO tests, TODO suites. CI runs on every push.
 
 ```bash
 forge test                                   # all offline tests
-forge test --match-path 'test/fork/*' -vvv   # fork tests (needs RPC env vars)
+forge test --match-path 'contracts/test/fork/*' -vvv   # fork tests (needs RPC env vars)
 forge test --gas-report
 ```
 
@@ -392,7 +394,7 @@ forge test --gas-report
 
 ## Run it locally
 
-**Prerequisites:** [Foundry](https://book.getfoundry.sh), Node.js 20+.
+**Prerequisites:** [Foundry](https://book.getfoundry.sh), Node.js ≥ 22.18.
 
 ```bash
 git clone --recurse-submodules https://github.com/TODO/hedgeline.git
@@ -419,20 +421,20 @@ cp .env.example .env
 Get testnet lREACT by sending Sepolia or Base Sepolia ETH to the [Lasna faucet](https://dev.reactive.network/reactive-mainnet#get-testnet-react). Callback proxy addresses are listed in [Origins & Destinations](https://dev.reactive.network/origins-and-destinations#testnet-chains).
 
 ```bash
-# 1. Base Sepolia: test tokens, reference pool, MiniPerp
-forge script script/01_DeployBase.s.sol --rpc-url $BASE_SEPOLIA_RPC --broadcast
+# 1. Base Sepolia: test tokens (CREATE2, same addresses as on Unichain), reference pool, MiniPerp
+forge script contracts/script/01_DeployBase.s.sol --rpc-url $BASE_SEPOLIA_RPC --broadcast
 
-# 2. Unichain Sepolia: test tokens, vault hook (address mined), pool + initial liquidity
-forge script script/02_DeployUnichain.s.sol --rpc-url $UNICHAIN_SEPOLIA_RPC --broadcast
+# 2. Unichain Sepolia: test tokens (same CREATE2 salt; script reverts if addresses or token order differ), vault hook (address mined), pool + initial liquidity
+forge script contracts/script/02_DeployUnichain.s.sol --rpc-url $UNICHAIN_SEPOLIA_RPC --broadcast
 
 # 3. Reactive Lasna: reactive contract (subscribes in its constructor), funded with lREACT
-forge script script/03_DeployReactive.s.sol --rpc-url $LASNA_RPC --broadcast
+forge script contracts/script/03_DeployReactive.s.sol --rpc-url $LASNA_RPC --broadcast
 
 # 4. Base Sepolia: hedger (callback proxy + reactive address), fund margin + callback fees
-forge script script/04_DeployHedger.s.sol --rpc-url $BASE_SEPOLIA_RPC --broadcast
+forge script contracts/script/04_DeployHedger.s.sol --rpc-url $BASE_SEPOLIA_RPC --broadcast
 
 # 5. Lasna: point the reactive contract at the hedger
-forge script script/05_Wire.s.sol --rpc-url $LASNA_RPC --broadcast
+forge script contracts/script/05_Wire.s.sol --rpc-url $LASNA_RPC --broadcast
 ```
 
 Timers, cooldowns and funding on Base Sepolia use `block.timestamp`, never block counts, because Base Sepolia produces 200 ms blocks.
@@ -468,7 +470,7 @@ hedgeline/
 - **Authenticated callbacks.** `HedgelineHedger` inherits `AbstractCallback` and guards every callback with both `onlyServiceProvider` (the call came through Reactive's callback proxy) and `onlyCallbackSender` (the injected sender is our `HedgelineReactive`).
 - **Authenticated reactive input.** `react()` is `onlySystem`, so only Reactive's system contract can deliver logs, and every subscription is pinned to a specific chain, contract and topic.
 - **Replay and ordering protection.** Monotonic nonces are checked on the destination; targets are absolute sizes, so a late callback can never stack on top of a newer one.
-- **Bounded actions.** The hedger clamps every requested size to `h_max × reported delta` and a per-callback change limit, so a bad payload can't open an outsized short.
+- **Bounded actions.** The hedger clamps every requested size to `|target| ≤ maxShortWad` and every change to `|target − current| ≤ maxStepWad`, so a bad payload can't open an outsized short.
 - **No swap-curve changes.** The vault hook doesn't alter pricing. Traders use a standard v4 pool.
 - **Partial hedge by default.** `h = 0.65` plus the margin guard keeps the short away from liquidation.
 - **Pause switch.** The owner can pause new hedges. Closing the short is always allowed.
@@ -539,6 +541,8 @@ hedgeline/
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+Hedgeline's own code is MIT. See [LICENSE](LICENSE).
+
+Dependencies keep their upstream licenses and are pulled in as git submodules, not copied into this repo. In particular, [`reactive-lib-omni`](https://github.com/Reactive-Network/reactive-lib-omni) is published `UNLICENSED` upstream, so it is used only as a submodule and never vendored.
 
 <p align="center"><b>Hedgeline</b> — your hedge keeps up, even when your pool sleeps.</p>
