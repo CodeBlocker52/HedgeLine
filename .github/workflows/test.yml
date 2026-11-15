@@ -1,0 +1,46 @@
+name: test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  FOUNDRY_PROFILE: ci
+
+jobs:
+  forge:
+    name: forge build + test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.9.0
+
+      - name: Build
+        run: forge build --sizes
+
+      - name: Test
+        # Fork tests need RPCs and are excluded here; run them locally with --match-path 'contracts/test/fork/*'.
+        run: forge test -vvv --no-match-path 'contracts/test/fork/*'
+
+  scripts:
+    name: scripts typecheck
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: scripts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: scripts/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
