@@ -9,10 +9,10 @@ Sources: **D** = live docs captured in `docs/research/*.md` (fetched 2026-11-16)
 
 **No ❌ on any core fact** (addresses, API names, payload rules all match plan.md §2). Open items:
 
-- ❓ Lasna EVM version under a *real deployment* — `eth_call` shows Cancun opcodes work (PUSH0, TSTORE/TLOAD, MCOPY); `BLOBBASEFEE` crashes the RPC handler. Confirm with the M1 deploy.
-- ❓ End-to-end latency per hop — M1.
-- ❓ PoolManager `Swap` delivered to Lasna with `topic1 = poolId` filter — M1 step 3.
-- ❓ `getCallbacks` return shape on a real reactive tx — M1 (signature is documented, never executed by us).
+- ✅ (M1) Lasna runs Cancun bytecode: PingReactive (solc 0.8.30, `evm_version = cancun`, 127 PUSH0 + 2 MCOPY in runtime code) deployed and ran `react()` 28 times. `BLOBBASEFEE` still untested (never use it).
+- ✅ (M1) Full-loop latency measured (origin block → Base dest block, median 1.4–2.0 s estimated sub-second). ❌ **Per-hop split is not measurable from chain timestamps**: Lasna block timestamps run behind Base/Unichain (Lasna tx stamped −1…+1 s vs. its origin, always +2 s before the Base dest), and Lasna `eth_getLogs` visibility lags Base. See `docs/reviews/M1.md`.
+- ✅ (M1) PoolManager `Swap` delivered to Lasna with `topic1 = poolId` filter (6/6); `sqrtPriceX96` decoded from data word 2 matches `slot0`.
+- ❌ (M1) `getCallbacks(lasnaTxHash)` returned `[]` for **all** 27 reactive txs, including 17 whose callbacks were delivered, still empty 10–35 min later. Delivered callbacks are proven instead by the system contract's `CallbackRequest` log in the Lasna receipt + the destination event. Issue note drafted for the Reactive dev channel (docs/reviews/M1.md).
 - ❌ (minor, process only) Plan §1.3: the `basic`, `cron`, `uniswap-v2-stop-take-profit-order` demos on `main` are **all legacy**; Omni demos live on the `omni` branch under `src/micro-demos/` instead. See `demos.md`.
 - ➕ New facts not in the plan: callback-proxy gas params, Lasna gas price, Swap `data` layout — see bottom.
 
@@ -93,7 +93,7 @@ event Swap(PoolId indexed id, address indexed sender, int128 amount0, int128 amo
 | Proxy withholds `_extraGas` + `_maxChargeGas` before forwarding | ✅ | D; values ➕ below |
 | Billing: RC pays lREACT; callbacks billed to recipient in destination ETH, even on failure; debt > 0 ⇒ inactive; `depositTo(address)`; `coverDebt()` wrapper | ✅ | D (economy, callback-contracts) |
 | CRON: legacy address + `Cron10` topic `0x04463f7c…b687`, every 10 blocks ≈ 10 s, bills each tick | ✅ | D; C `cast keccak "Cron10(uint256)"` matches |
-| `getCallbacks(uint256)((uint256,address,uint256,uint256,uint256,bytes)[])` | ✅ signature / ❓ execution | D (economy › Inspecting Callbacks: block number, requester, index, dest chain, dest tx hash, err). Not yet called on a real tx — M1. |
+| `getCallbacks(uint256)((uint256,address,uint256,uint256,uint256,bytes)[])` | ✅ signature / ❌ always `[]` in M1 | D (economy › Inspecting Callbacks). M1: empty for 27 real reactive txs incl. 17 delivered callbacks. Use `CallbackRequest` logs (topic0 `0xef94dbc6…b133`) + destination events instead. |
 | Sourcify verify `--chain-id 5318007` | ✅ | D |
 
 ## 2.5 Omni callback contract API
@@ -110,9 +110,9 @@ event Swap(PoolId indexed id, address indexed sender, int128 amount0, int128 amo
 
 | Question | Status | Evidence / plan |
 |---|---|---|
-| Lasna EVM version | ❓ partially answered | C raw `eth_call` with init code on Lasna: `PUSH0` ✅, `TSTORE/TLOAD` ✅, `MCOPY` ✅ ⇒ Cancun-level execution; `BLOBBASEFEE` ⇒ RPC error `method handler crashed` (never use `block.blobbasefee`). Same probes all succeed on Base/Unichain Sepolia. Confirm with a real deploy in M1. |
-| Real end-to-end latency per hop | ❓ | M1 (`scripts/watch.ts`) |
-| Base PoolManager `Swap` reaches Lasna with `topic1 = poolId` | ❓ | M1 step 3 |
+| Lasna EVM version | ✅ Cancun (M1 deploy) | C raw `eth_call` with init code on Lasna: `PUSH0` ✅, `TSTORE/TLOAD` ✅, `MCOPY` ✅ ⇒ Cancun-level execution; `BLOBBASEFEE` ⇒ RPC error `method handler crashed` (never use `block.blobbasefee`). Same probes all succeed on Base/Unichain Sepolia. Confirm with a real deploy in M1. |
+| Real end-to-end latency per hop | ✅ total / ❌ per hop | M1: see `docs/LATENCY.md`; Lasna timestamps not aligned with Base |
+| Base PoolManager `Swap` reaches Lasna with `topic1 = poolId` | ✅ | M1 E3, 6/6 |
 | Callback proxy `_extraGas` / `_maxChargeGas` on Base Sepolia | ✅ resolved | C — see below |
 
 ## ➕ New facts (not in plan.md)
@@ -137,3 +137,14 @@ event Swap(PoolId indexed id, address indexed sender, int128 amount0, int128 amo
 
 `reactive-lib-omni` is UNLICENSED upstream. It is kept **only as a git submodule** (`lib/reactive-lib-omni`, pinned in `.gitmodules` + `foundry.lock`);
 its source is not committed to our tree. The demos repo is also UNLICENSED and is cloned into gitignored folders only.
+
+## ➕ M1 measurements (from scripts/results/m1 and cast; see docs/reviews/M1.md)
+
+| Item | Value | Source |
+|---|---|---|
+| lREACT charged per reactive tx (100 gwei) | Ping relayed 0.0128474 (receipt gasUsed 88,289) · Swap relayed 0.0128561 (90,436) · skipped 0.0113166 (74,324) | `cast balance` of PingReactive at blocks N−1 / N |
+| Charge vs docs formula | **lower** than `gasPrice × (receipt gasUsed + _extraGas 100k)` (0.0188 predicted for 88,289) | same |
+| Lasna receipts | `effectiveGasPrice` = 0 in receipts (tx shows 100 gwei); `cumulativeGasUsed` 0; log `blockTimestamp` 0x0 | `cast receipt` |
+| Callback tx on Base | tx `gasLimit` = requested `gasLimit` (300,000); gasUsed 65,678–65,714; sender `0xF7E866D726658F6C3F14B8EE537fe268a4D91DDb` → proxy | `cast tx` / receipts |
+| Callback cost on Base | 17 callbacks reduced receiver proxy reserves by 0.000010767722097184 ETH (≈ 6.3e-7 ETH each) — billed on gasUsed, not limit | `reserves(receiver)` |
+| Base public RPC | `eth_getLogs` limited to 200 blocks (≈ 40 s); errors if `toBlock` > head | RPC errors |
