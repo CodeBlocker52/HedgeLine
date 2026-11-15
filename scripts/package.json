@@ -1,0 +1,21 @@
+{
+  "name": "hedgeline-scripts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Hedgeline demo + measurement scripts (TypeScript, viem). Runs on Node's native TS type stripping.",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "check-balances": "node --env-file=../.env check-balances.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "viem": "2.57.13"
+  },
+  "devDependencies": {
+    "@types/node": "22.18.6",
+    "typescript": "5.9.2"
+  }
+}

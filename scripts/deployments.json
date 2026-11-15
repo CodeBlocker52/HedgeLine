@@ -1,0 +1,5 @@
+{
+  "unichainSepolia": { "chainId": 1301, "contracts": {}, "txs": {} },
+  "baseSepolia": { "chainId": 84532, "contracts": {}, "txs": {} },
+  "lasna": { "chainId": 5318007, "contracts": {}, "txs": {} }
+}
