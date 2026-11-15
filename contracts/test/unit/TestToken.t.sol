@@ -49,4 +49,13 @@ contract TestTokenTest is Test {
         uint256 rawWethPerUsdc = p1 * p1 / q192; // 1e18/3000e6 ≈ 333,333,333
         assertApproxEqRel(rawWethPerUsdc, 333_333_333, 1e12);
     }
+
+    /// plan.md §3.2: the recorded salts make tWETH token0 (address(tWETH) < address(tUSDC)).
+    function test_recordedSaltsMakeTWethToken0() public pure {
+        address weth = M1Lib.create2Address(M1Lib.SALT_TWETH, M1Lib.tWethInitCode());
+        address usdc = M1Lib.create2Address(M1Lib.SALT_TUSDC, M1Lib.tUsdcInitCode());
+        assertLt(uint160(weth), uint160(usdc));
+        assertEq(M1Lib.SALT_TWETH, keccak256("hedgeline.TestToken.tWETH.v1.0"));
+        assertEq(M1Lib.SALT_TUSDC, keccak256("hedgeline.TestToken.tUSDC.v1"));
+    }
 }

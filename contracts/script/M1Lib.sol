@@ -16,7 +16,8 @@ library M1Lib {
     address internal constant CREATE2_DEPLOYER = 0x4e59b44847b379578588920cA78FbF26c0B4956C;
 
     /// CREATE2 salts. Same salt + same init code on both chains => same address on both chains.
-    bytes32 internal constant SALT_TWETH = keccak256("hedgeline.TestToken.tWETH.v1");
+    /// tWETH salt mined (contracts/script/MineTokenSalt.s.sol) so that address(tWETH) < address(tUSDC): tWETH is token0.
+    bytes32 internal constant SALT_TWETH = keccak256("hedgeline.TestToken.tWETH.v1.0");
     bytes32 internal constant SALT_TUSDC = keccak256("hedgeline.TestToken.tUSDC.v1");
     bytes32 internal constant SALT_PING_ORIGIN = keccak256("hedgeline.spike.PingOrigin.m1");
 

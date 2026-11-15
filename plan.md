@@ -179,6 +179,14 @@ HedgelineVault (v4 hook)  ──S1──▶ HedgelineReactive ──applyHedge�
 - Deploy `TestToken` (Solady ERC20, public `mint` capped per call) as **tWETH (18 dec)** and **tUSDC (6 dec)** on **both** Unichain Sepolia and Base Sepolia.
 - **Pool orientation must be identical on both chains** (same token0/token1 meaning and decimals) so one `sqrtPriceX96` means the same price everywhere.
 - **Decided (M0 review): deploy both tokens with CREATE2** through the deterministic deployer `0x4e59b44847b379578588920ca78fbf26c0b4956c` (present on Base Sepolia and Unichain Sepolia), **same salt + same init code on both chains**. The deploy script must assert that (a) each token's address is identical on both chains and (b) the token0/token1 order is the same on both, and **revert otherwise**. No `invertedPair` flag.
+- **Recorded salts (M1).** **tWETH must be token0** (§3.8 assumes it; the pool price is then ≈ 3000 tUSDC per tWETH). The tWETH salt was mined offline with `contracts/script/MineTokenSalt.s.sol` (iterate `<i>` until `address(tWETH) < address(tUSDC)`); `M1Deploy` also reverts if tWETH isn't token0. Constants live in `contracts/script/M1Lib.sol`:
+
+  | Token | Salt preimage | Salt | Constructor args |
+  |---|---|---|---|
+  | tWETH | `keccak256("hedgeline.TestToken.tWETH.v1.0")` | `0x58ea70424e810c4cac32f8d0d8a0a933b22b9dfbb849423b23430e375e865e21` | `("Hedgeline Test WETH", "tWETH", 18, 1_000e18)` |
+  | tUSDC | `keccak256("hedgeline.TestToken.tUSDC.v1")` | `0x21413999aad98318d7d6b9401b7a8dc57160d931275847f7445e96212966cf70` | `("Hedgeline Test USDC", "tUSDC", 6, 10_000_000e6)` |
+
+  Changing `TestToken.sol` or its constructor args changes the init code, so the addresses change and the salt must be re-mined.
 
 ### 3.3 `HedgelineVault` (Unichain Sepolia) — v4 hook + LP vault
 
