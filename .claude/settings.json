@@ -13,7 +13,23 @@
       "Bash(head .env)",
       "Bash(tail .env)",
       "Bash(grep * .env)",
-      "Bash(source .env)"
+      "Bash(source .env)",
+      "Read(./**/.env.local)",
+      "Read(./**/.env.development)",
+      "Read(./**/.env.production)",
+      "Read(./**/.env.test)",
+      "Edit(./**/.env.local)",
+      "Edit(./**/.env.development)",
+      "Edit(./**/.env.production)",
+      "Edit(./**/.env.test)",
+      "Write(./**/.env.local)",
+      "Write(./**/.env.development)",
+      "Write(./**/.env.production)",
+      "Write(./**/.env.test)",
+      "Bash(cat ./.env)",
+      "Bash(cat ../.env)",
+      "Bash(printenv)",
+      "Bash(env)"
     ]
   }
 }

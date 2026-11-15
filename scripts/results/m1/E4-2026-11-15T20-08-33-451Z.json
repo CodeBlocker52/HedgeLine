@@ -50,6 +50,15 @@
         "wallClock": {
           "originSeenToLasnaSeenMs": 3617
         }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794774211756,
+        "callbacks": []
+      },
+      "noDestPostHoc": {
+        "scannedFromBlock": "59257245",
+        "scannedToBlock": "59260245",
+        "pingedTxs": []
       }
     },
     {
@@ -99,6 +108,15 @@
         "wallClock": {
           "originSeenToLasnaSeenMs": 1752
         }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794774219128,
+        "callbacks": []
+      },
+      "noDestPostHoc": {
+        "scannedFromBlock": "59257326",
+        "scannedToBlock": "59260326",
+        "pingedTxs": []
       }
     },
     {
@@ -148,6 +166,15 @@
         "wallClock": {
           "originSeenToLasnaSeenMs": 2506
         }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794774226103,
+        "callbacks": []
+      },
+      "noDestPostHoc": {
+        "scannedFromBlock": "59257404",
+        "scannedToBlock": "59260404",
+        "pingedTxs": []
       }
     },
     {
@@ -197,6 +224,15 @@
         "wallClock": {
           "originSeenToLasnaSeenMs": 2593
         }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794774233834,
+        "callbacks": []
+      },
+      "noDestPostHoc": {
+        "scannedFromBlock": "59257484",
+        "scannedToBlock": "59260484",
+        "pingedTxs": []
       }
     },
     {
@@ -246,6 +282,15 @@
         "wallClock": {
           "originSeenToLasnaSeenMs": 2915
         }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794774240632,
+        "callbacks": []
+      },
+      "noDestPostHoc": {
+        "scannedFromBlock": "59257560",
+        "scannedToBlock": "59260560",
+        "pingedTxs": []
       }
     }
   ]

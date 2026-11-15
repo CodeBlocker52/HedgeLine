@@ -353,7 +353,7 @@
   },
   "E4": {
     "samples": 5,
-    "skipped": 5,
+    "skippedBySkipFlag": 5,
     "callbackRequestLogs": 0,
     "pinged": 0,
     "reactGas": {

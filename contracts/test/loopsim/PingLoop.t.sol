@@ -38,6 +38,7 @@ contract PingLoopTest is Test {
     MockSystemContract sys;
     MockCallbackProxy proxy;
     PingOrigin origin;
+    PingOrigin originUni;
     IPoolManager manager;
     PoolSwapTest swapRouter;
     PoolKey key;
@@ -51,6 +52,7 @@ contract PingLoopTest is Test {
         sys = MockSystemContract(payable(OmniSim.SYSTEM));
         proxy = new MockCallbackProxy();
         origin = new PingOrigin();
+        originUni = new PingOrigin();
 
         // Real v4 PoolManager + reference pool, so the Swap route is tested against the real event layout.
         manager = IPoolManager(deployCode("PoolManager.sol:PoolManager", abi.encode(address(this))));
@@ -80,7 +82,9 @@ contract PingLoopTest is Test {
             ""
         );
 
-        rc = new PingReactive{ value: 1 ether }(address(origin), address(origin), address(manager), poolId, GAS_LIMIT);
+        rc = new PingReactive{ value: 1 ether }(
+            address(origin), address(originUni), address(manager), poolId, GAS_LIMIT
+        );
         receiver = new PingReceiver(IPayable(payable(address(proxy))), address(rc));
         rc.setReceiver(address(receiver));
     }
@@ -169,7 +173,7 @@ contract PingLoopTest is Test {
 
         MockSystemContract.Sub memory b = sys.sub(1);
         assertEq(b.chainId, UNICHAIN);
-        assertEq(b.contractAddr, address(origin));
+        assertEq(b.contractAddr, address(originUni), "Unichain subscription uses the Unichain origin arg");
         assertEq(b.topic0, uint256(PING_SIG));
 
         MockSystemContract.Sub memory c = sys.sub(2);
@@ -280,6 +284,17 @@ contract PingLoopTest is Test {
         assertEq(sys.requestCount(), 0, "no callbacks for unmatched logs");
     }
 
+    /// KNOWN GAP (security review M1, copy-forward): react() does not check log_.chainId / contractAddress, and the
+    /// poolId is chain-independent (same CREATE2 tokens on both chains). A Swap LogRecord claiming another chain is
+    /// relayed. The subscription filter prevents this on-chain today; HedgelineReactive (M3) must check both and
+    /// this test must then flip to assert no request.
+    function test_knownGap_swapFromOtherChainIsRelayed() public {
+        IReactive.LogRecord memory r = _swapLog(true, 0xdead);
+        r.chainId = UNICHAIN;
+        _react(r);
+        assertEq(sys.requestCount(), 1);
+    }
+
     function test_nonBooleanSkipWordDoesNotRevert() public {
         IReactive.LogRecord memory r = _pingLog(3, false, BASE, 1);
         r.data = abi.encode(uint256(2), uint256(123));
@@ -367,9 +382,11 @@ contract PingLoopTest is Test {
         uint256 onPingGas = g0 - gasleft();
         assertTrue(ok);
 
-        emit log_named_uint("react(Ping) gas, excl. system contract work", reactPingGas);
+        emit log_named_uint(
+            "react(Ping) gas, caller-side only (mock system); on-chain receipt is the real figure", reactPingGas
+        );
         emit log_named_uint("react(Ping skip) gas", reactSkipGas);
-        emit log_named_uint("react(Swap) gas, excl. system contract work", reactSwapGas);
+        emit log_named_uint("react(Swap) gas, caller-side only (mock system)", reactSwapGas);
         emit log_named_uint("onPing gas (call into receiver)", onPingGas);
         assertLt(reactPingGas, 100_000); // includes the mock's first lightCount SSTORE (~22k)
         assertLt(reactSwapGas, 100_000);

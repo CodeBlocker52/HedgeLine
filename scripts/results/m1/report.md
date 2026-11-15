@@ -77,3 +77,10 @@
 
 react() gasUsed (Lasna receipt): median 74324, max 74324
 
+### Runs excluded from the tables (fewer than 5 samples or any error)
+
+| run | exp | samples | errors |
+|---|---|---|---|
+| 2026-11-15T19-52-45-031Z | E1 | 1 | getCallbacks empty for a Relayed tx |
+| 2026-11-15T20-05-32-596Z | E4 | 5 | RPC Request failed (413): eth_getLogs is limited to a 200 range |
+

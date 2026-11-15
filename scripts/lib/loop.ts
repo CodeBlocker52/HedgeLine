@@ -95,6 +95,12 @@ export interface LoopResult {
   error?: string;
 }
 
+/** Error text safe to persist: viem's short message only, with any URL removed (RPC URLs may carry API keys). */
+export function safeError(e: unknown): string {
+  const err = e as { shortMessage?: string; message?: string };
+  return String(err.shortMessage ?? err.message ?? e).replace(/https?:\/\/\S+/g, "<url>");
+}
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const toHash = (x: bigint): Hash => `0x${x.toString(16).padStart(64, "0")}`;
 
@@ -273,7 +279,7 @@ export async function resolveLoop(o: ResolveOpts): Promise<LoopResult> {
     }
   } catch (e) {
     stopDest = true;
-    res.error = (e as Error).message;
+    res.error = safeError(e);
   }
 
   if (res.lasna) {

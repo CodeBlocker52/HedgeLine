@@ -17,7 +17,7 @@ const [exp = "E1", nArg = "5", gapArg = "12"] = process.argv.slice(2);
 
 // `npm run m1 -- recheck`: re-query getCallbacks for every Lasna tx in results/m1/*.json (read-only).
 if (exp === "recheck") {
-  for (const f of readdirSync("results/m1").filter((x) => x.endsWith(".json"))) {
+  for (const f of readdirSync("results/m1").filter((x) => /^E\d-.*\.json$/.test(x))) {
     const path = `results/m1/${f}`;
     const doc = JSON.parse(readFileSync(path, "utf8")) as {
       results: (LoopResult & { callbacksRecheck?: unknown; noDestPostHoc?: unknown })[];
@@ -46,6 +46,7 @@ if (exp === "recheck") {
 }
 if (!["E1", "E2", "E3", "E4"].includes(exp)) throw new Error("experiment must be E1|E2|E3|E4");
 const N = Number(nArg);
+if (!Number.isInteger(N) || N < 1 || N > 20) throw new Error("n must be 1..20 (budget rule 11)");
 const GAP_MS = Math.max(10, Number(gapArg)) * 1000; // spec: ≥ 10 s apart
 
 const pk = process.env.PRIVATE_KEY;
@@ -105,6 +106,14 @@ async function send(i: number): Promise<Hash> {
   }
   const n = BigInt(Date.now());
   return wallet.writeContract({ address: pingOrigin, abi: pingAbi, functionName: "ping", args: [n, exp === "E4"] });
+}
+
+// Budget (CLAUDE.md rule 11): keep ≥ 0.02 Base Sepolia ETH, and the reactive contract funded with no debt.
+{
+  const baseBal = await clients[baseSepolia.id].getBalance({ address: account.address });
+  if (baseBal < 20_000_000_000_000_000n + 1_000_000_000_000_000n) throw new Error("Base Sepolia balance too close to the 0.02 ETH reserve");
+  const rcBal = await clients[lasna.id].getBalance({ address: reactive });
+  if (rcBal < BigInt(N) * 13_000_000_000_000_000n) throw new Error("PingReactive lREACT balance too low for N reactive txs (~0.013 each)");
 }
 
 const runId = new Date().toISOString().replace(/[:.]/g, "-");

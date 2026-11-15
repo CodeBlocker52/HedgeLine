@@ -262,11 +262,20 @@ contract M1Deploy is Script {
         }
     }
 
-    function _privateKey() internal view returns (uint256) {
-        string memory raw = vm.envString("PRIVATE_KEY");
-        bytes memory b = bytes(raw);
-        if (b.length >= 2 && b[0] == "0" && (b[1] == "x" || b[1] == "X")) return vm.parseUint(raw);
-        return vm.parseUint(string.concat("0x", raw));
+    /// Parses PRIVATE_KEY without ever putting its value into an error message (forge parse errors echo input).
+    function _privateKey() internal view returns (uint256 k) {
+        bytes memory b = bytes(vm.envString("PRIVATE_KEY"));
+        uint256 start = (b.length >= 2 && b[0] == "0" && (b[1] == "x" || b[1] == "X")) ? 2 : 0;
+        require(b.length - start == 64, "PRIVATE_KEY: expected 32 bytes of hex");
+        for (uint256 i = start; i < b.length; ++i) {
+            uint8 c = uint8(b[i]);
+            uint8 v;
+            if (c >= 48 && c <= 57) v = c - 48;
+            else if (c >= 97 && c <= 102) v = c - 87;
+            else if (c >= 65 && c <= 70) v = c - 55;
+            else revert("PRIVATE_KEY: non-hex character");
+            k = (k << 4) | v;
+        }
     }
 
     function _recorded(string memory chain, string memory name) internal view returns (address a) {
@@ -274,7 +283,10 @@ contract M1Deploy is Script {
         string memory key = string.concat(".", chain, ".contracts.", name);
         if (!vm.keyExistsJson(json, key)) return address(0);
         a = vm.parseJsonAddress(json, key);
-        if (a.code.length == 0) return address(0); // recorded but not on this chain/fork: redeploy
+        // CLAUDE.md rule 7: never silently redeploy an address that is already recorded.
+        require(
+            a.code.length != 0, string.concat("recorded ", name, " has no code on this chain; ask before redeploying")
+        );
     }
 
     function _record(string memory chain, string memory name, address a) internal {

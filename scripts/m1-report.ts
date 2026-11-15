@@ -6,10 +6,12 @@ import type { LoopResult } from "./lib/loop.ts";
 import { EXPLORER } from "./lib/loop.ts";
 
 type Run = { exp: string; runId: string; results: LoopResult[] };
-const runs: Run[] = readdirSync("results/m1")
+const all: Run[] = readdirSync("results/m1")
   .filter((f) => /^E\d-.*\.json$/.test(f))
-  .map((f) => JSON.parse(readFileSync(`results/m1/${f}`, "utf8")) as Run)
-  .filter((r) => r.results.length >= 5 && r.results.every((x) => !x.error));
+  .map((f) => JSON.parse(readFileSync(`results/m1/${f}`, "utf8")) as Run);
+const ok = (r: Run) => r.results.length >= 5 && r.results.every((x) => !x.error);
+const runs = all.filter(ok);
+const excluded = all.filter((r) => !ok(r));
 
 const median = (xs: number[]) => {
   if (xs.length === 0) return NaN;
@@ -31,10 +33,11 @@ for (const exp of ["E1", "E2", "E3", "E4"]) {
   if (exp === "E4") {
     md += "| # | origin tx | Lasna tx | event | CallbackRequest logs | Pinged on Base | getCallbacks | react gas |\n|---|---|---|---|---|---|---|---|\n";
     rs.forEach((r, i) => {
-      md += `| ${i} | ${link(r.originChainId, r.origin.txHash)} | ${link(5318007, r.lasna?.txHash)} | ${r.lasna?.event}${r.lasna?.skipReason ? ` (reason ${r.lasna.skipReason})` : ""} | ${r.lasna?.callbackRequestLogs} | none (Base blocks ${r.origin.blockNumber}–${r.noDestScannedToBlock}) | ${r.callbacks?.length} | ${r.lasna?.gasUsed} |\n`;
+      const pingedCell = r.dest ? link(84532, r.dest.txHash) : `none (Base blocks ${r.origin.blockNumber}–${r.noDestScannedToBlock})`;
+      md += `| ${i} | ${link(r.originChainId, r.origin.txHash)} | ${link(5318007, r.lasna?.txHash)} | ${r.lasna?.event}${r.lasna?.skipReason ? ` (reason ${r.lasna.skipReason})` : ""} | ${r.lasna?.callbackRequestLogs} | ${pingedCell} | ${r.callbacks?.length} | ${r.lasna?.gasUsed} |\n`;
     });
     const g = def(rs.map((r) => (r.lasna ? Number(r.lasna.gasUsed) : undefined)));
-    summary[exp] = { samples: rs.length, skipped: rs.filter((r) => r.lasna?.event === "Skipped").length, callbackRequestLogs: rs.reduce((a, r) => a + (r.lasna?.callbackRequestLogs ?? 0), 0), pinged: rs.filter((r) => r.dest).length, reactGas: { median: median(g), max: max(g) } };
+    summary[exp] = { samples: rs.length, skippedBySkipFlag: rs.filter((r) => r.lasna?.event === "Skipped" && r.lasna.skipReason === 1).length, callbackRequestLogs: rs.reduce((a, r) => a + (r.lasna?.callbackRequestLogs ?? 0), 0), pinged: rs.filter((r) => r.dest).length, reactGas: { median: median(g), max: max(g) } };
     md += `\nreact() gasUsed (Lasna receipt): median ${median(g)}, max ${max(g)}\n\n`;
     continue;
   }
@@ -76,6 +79,14 @@ for (const exp of ["E1", "E2", "E3", "E4"]) {
   md += `| callback tx gasUsed | ${a.callbackTxGas.median} | ${a.callbackTxGas.max} | Base receipt (proxy + onPing) |\n\n`;
 }
 
+if (excluded.length) {
+  md += "### Runs excluded from the tables (fewer than 5 samples or any error)\n\n| run | exp | samples | errors |\n|---|---|---|---|\n";
+  for (const r of excluded) {
+    const errs = [...new Set(r.results.map((x) => x.error).filter(Boolean))].join("; ").replace(/\|/g, "/").slice(0, 200);
+    md += `| ${r.runId} | ${r.exp} | ${r.results.length} | ${errs || "—"} |\n`;
+  }
+  md += "\n";
+}
 writeFileSync("results/m1/report.md", md);
 writeFileSync("results/m1/summary.json", JSON.stringify(summary, null, 2));
 console.log(md);
