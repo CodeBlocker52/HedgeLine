@@ -10,7 +10,11 @@
   "scripts": {
     "check-balances": "node --env-file=../.env check-balances.ts",
     "typecheck": "tsc --noEmit",
-    "block-time": "node --env-file=../.env block-time.ts"
+    "block-time": "node --env-file=../.env block-time.ts",
+    "watch": "node --env-file=../.env watch.ts",
+    "m1": "node --env-file=../.env m1-experiments.ts",
+    "m1-report": "node m1-report.ts",
+    "record-broadcast": "node record-broadcast.ts"
   },
   "dependencies": {
     "viem": "2.57.13"

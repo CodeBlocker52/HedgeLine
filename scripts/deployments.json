@@ -1,5 +1,51 @@
 {
-  "unichainSepolia": { "chainId": 1301, "contracts": {}, "txs": {} },
-  "baseSepolia": { "chainId": 84532, "contracts": {}, "txs": {} },
-  "lasna": { "chainId": 5318007, "contracts": {}, "txs": {} }
+  "unichainSepolia": {
+    "chainId": 1301,
+    "contracts": {
+      "PingOrigin": "0xdAF5b838E622f6cc72DD462fC44C5cfD45502552",
+      "tWETH": "0x0d362cDE021F67e3Dd78448fD6F7d1E0F7d882E3",
+      "tUSDC": "0x1381cADC3Fda6c025708291aAe660A69Db542195"
+    },
+    "txs": {
+      "deployPingOrigin": "0x9227e54d74e2aa3d349480535ac93c94de9b4cbffe203f5384db3c3443e49b03",
+      "deployTestToken:0x0d362cde021f67e3dd78448fd6f7d1e0f7d882e3": "0xf089bdc73d417e66e94fe7686da2c816f30b1be8ee0158575242416338323581",
+      "deployTestToken:0x1381cadc3fda6c025708291aae660a69db542195": "0x1fc5e9a895e378d555baef461805f51cf7b4e7e8cb1633f6b7b444d93329318f"
+    }
+  },
+  "baseSepolia": {
+    "chainId": 84532,
+    "contracts": {
+      "PingOrigin": "0xdAF5b838E622f6cc72DD462fC44C5cfD45502552",
+      "tWETH": "0x0d362cDE021F67e3Dd78448fD6F7d1E0F7d882E3",
+      "tUSDC": "0x1381cADC3Fda6c025708291aAe660A69Db542195",
+      "PingReceiver": "0x4FD40A0C2e5Ef0e0f1681F7b2b648390a4F491F3"
+    },
+    "txs": {
+      "deployPingOrigin": "0x9ddf9c68c610441f358cb04603fc025b53a4af9f08c2959304f11004d9201865",
+      "deployTestToken:0x0d362cde021f67e3dd78448fd6f7d1e0f7d882e3": "0x6cefb58f6c505e96f2398681530ef031f3dc3887fa796ef6e779f39891a86678",
+      "deployTestToken:0x1381cadc3fda6c025708291aae660a69db542195": "0x5b8abb675634548c9908c715e3a0f425f063c589c0793226aec2871c3587f45f",
+      "initialize": "0xf6daa3139f7fdd6c3820b31f5e0409cf1d9c06a523bb1d4772386c400619c611",
+      "modifyLiquidity": "0x50c117e7850779580a93591c5fee2dafeb914e70077e71d8e50a65b4cca528e3",
+      "deployPingReceiver": "0x07f24ae9f34834fbb7bf050f3a4ff84b1ff5d1352463be1631aadc9e96ffb4a9",
+      "depositTo": "0x23d71799dee2201eedaa3b1e81bac485571af36a333abe39d774e99729538a83",
+      "mint:0x0d362cde021f67e3dd78448fd6f7d1e0f7d882e3:3": "0xd1478d37fdd00e85c98183f9eda130c183e727e8afc3e1f4edfdb0bf9f2b301e",
+      "mint:0x1381cadc3fda6c025708291aae660a69db542195:4": "0x2f1b51fcc7d8cfa6f48d15b4e1996bb9ecc0502f1f0c9a632799d0cfad0ac080",
+      "approve:0x0d362cde021f67e3dd78448fd6f7d1e0f7d882e3:6": "0x8834abaaa938212ed68bff9827575cf5fc7c58d564fc857a596fadba0c3042a8",
+      "approve:0x1381cadc3fda6c025708291aae660a69db542195:7": "0x87e486ec6dd02f33533f859c4b883143e9255ca04d65ce3f9d09b183c271d854",
+      "approve:0x0d362cde021f67e3dd78448fd6f7d1e0f7d882e3:9": "0xace8e48e965b16cfa575854a07424efeaf6ae89669dabe28f6f810212d9fae50",
+      "approve:0x1381cadc3fda6c025708291aae660a69db542195:10": "0xb2326797ff61cd4e1ff9ab16ec549c52af347c52170485221101d314a2886ba7"
+    },
+    "referencePoolId": "0x5e2f2bf5d2bc284f7ccce535585f8051cb28be0e3e6795915c51f459e2950112",
+    "referencePoolKey": "fee=3000,tickSpacing=60,hooks=0x0,currency0=0x0d362cDE021F67e3Dd78448fD6F7d1E0F7d882E3"
+  },
+  "lasna": {
+    "chainId": 5318007,
+    "contracts": {
+      "PingReactive": "0x7fd4E8700E5CCaF1812A36EcE062A54355204589"
+    },
+    "txs": {
+      "deployPingReactive": "0x867eea7c1b73861b313a6b1cffab50bafac69b38261d53b30458e6c172b5b3ac",
+      "setReceiver": "0x11e26befd5bd8c0c54eeef8c83acbd4db5574b68053d9493efa20dca328cb6c4"
+    }
+  }
 }
