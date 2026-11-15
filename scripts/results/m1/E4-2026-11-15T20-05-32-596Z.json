@@ -1,0 +1,282 @@
+{
+  "exp": "E4",
+  "runId": "2026-11-15T20-05-32-596Z",
+  "gapMs": 12000,
+  "results": [
+    {
+      "originChainId": 84532,
+      "originTxHash": "0x5605f177060aa80338287f09cb8966ba0b5fabf458540452997b5d62db87ac90",
+      "sentAtMs": 1794773134753,
+      "clockSkewS": {
+        "base": 0.2,
+        "unichain": -0.8,
+        "lasna": -0.8
+      },
+      "origin": {
+        "chainId": 84532,
+        "txHash": "0x5605f177060aa80338287f09cb8966ba0b5fabf458540452997b5d62db87ac90",
+        "blockNumber": "59256342",
+        "timestampS": 1794773137,
+        "estimatedMs": 1794773137200,
+        "positionInSecond": 1,
+        "gasUsed": "23386",
+        "wallClockSeenMs": 1794773137212
+      },
+      "lasna": {
+        "chainId": 5318007,
+        "txHash": "0x77c1420b75b2df979202f91e0b3c6c55dbeecb8cee6e2e27b7ffe1440c27563d",
+        "blockNumber": "8434006",
+        "timestampS": 1794773137,
+        "estimatedMs": 1794773137000,
+        "positionInSecond": 0,
+        "gasUsed": "74315",
+        "wallClockSeenMs": 1794773139574,
+        "event": "Skipped",
+        "n": "1794773134753",
+        "skipReason": 1,
+        "callbackRequestLogs": 0
+      },
+      "error": "RPC Request failed.\n\nStatus: 413\nURL: https://sepolia.base.org/\nRequest body: {\"method\":\"eth_getLogs\",\"params\":[{\"address\":\"0x4FD40A0C2e5Ef0e0f1681F7b2b648390a4F491F3\",\"topics\":[\"0x46d3b7d68bada996e0965bd77a6cb589b8ab5426c15ef540c5b9d1f4475dbc6b\",null,null,\"0x5605f177060aa80338287f09cb8966ba0b5fabf458540452997b5d62db87ac90\"],\"fromBlock\":\"0x3882e01\"}]}\n\nDetails: eth_getLogs is limited to a 200 range\nVersion: viem@2.57.13",
+      "latency": {
+        "wholeSecond": {
+          "originToLasnaS": 0
+        },
+        "estimatedSubSecond": {
+          "originToLasnaMs": -200
+        },
+        "wallClock": {
+          "originSeenToLasnaSeenMs": 2362
+        }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794773297821,
+        "callbacks": []
+      },
+      "noDestPostHoc": {
+        "scannedFromBlock": "59256342",
+        "scannedToBlock": "59257147",
+        "pingedTxs": []
+      }
+    },
+    {
+      "originChainId": 84532,
+      "originTxHash": "0xb56b30482444d6dfe5a9e832863f3fda02ec509988779a538647166add144d3e",
+      "sentAtMs": 1794773151345,
+      "clockSkewS": {
+        "base": -0.3,
+        "unichain": -1.3,
+        "lasna": -1.3
+      },
+      "origin": {
+        "chainId": 84532,
+        "txHash": "0xb56b30482444d6dfe5a9e832863f3fda02ec509988779a538647166add144d3e",
+        "blockNumber": "59256424",
+        "timestampS": 1794773153,
+        "estimatedMs": 1794773153600,
+        "positionInSecond": 3,
+        "gasUsed": "23386",
+        "wallClockSeenMs": 1794773153615
+      },
+      "lasna": {
+        "chainId": 5318007,
+        "txHash": "0x819a67ebc05ca13602c420adea0125f063abac347233cb0546a6a560ce04ccc3",
+        "blockNumber": "8434021",
+        "timestampS": 1794773153,
+        "estimatedMs": 1794773153000,
+        "positionInSecond": 0,
+        "gasUsed": "74324",
+        "wallClockSeenMs": 1794773156567,
+        "event": "Skipped",
+        "n": "1794773151345",
+        "skipReason": 1,
+        "callbackRequestLogs": 0
+      },
+      "error": "RPC Request failed.\n\nStatus: 413\nURL: https://sepolia.base.org/\nRequest body: {\"method\":\"eth_getLogs\",\"params\":[{\"address\":\"0x4FD40A0C2e5Ef0e0f1681F7b2b648390a4F491F3\",\"topics\":[\"0x46d3b7d68bada996e0965bd77a6cb589b8ab5426c15ef540c5b9d1f4475dbc6b\",null,null,\"0xb56b30482444d6dfe5a9e832863f3fda02ec509988779a538647166add144d3e\"],\"fromBlock\":\"0x3882e54\"}]}\n\nDetails: eth_getLogs is limited to a 200 range\nVersion: viem@2.57.13",
+      "latency": {
+        "wholeSecond": {
+          "originToLasnaS": 0
+        },
+        "estimatedSubSecond": {
+          "originToLasnaMs": -600
+        },
+        "wallClock": {
+          "originSeenToLasnaSeenMs": 2952
+        }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794773300528,
+        "callbacks": []
+      },
+      "noDestPostHoc": {
+        "scannedFromBlock": "59256424",
+        "scannedToBlock": "59257160",
+        "pingedTxs": []
+      }
+    },
+    {
+      "originChainId": 84532,
+      "originTxHash": "0xf45fd18c63cd3f053e3977672a323aced0389d8f2f4f9aa78362d6d610330ce5",
+      "sentAtMs": 1794773167620,
+      "clockSkewS": {
+        "base": 0.3,
+        "unichain": -0.7,
+        "lasna": -0.7
+      },
+      "origin": {
+        "chainId": 84532,
+        "txHash": "0xf45fd18c63cd3f053e3977672a323aced0389d8f2f4f9aa78362d6d610330ce5",
+        "blockNumber": "59256504",
+        "timestampS": 1794773169,
+        "estimatedMs": 1794773169600,
+        "positionInSecond": 3,
+        "gasUsed": "23386",
+        "wallClockSeenMs": 1794773169772
+      },
+      "lasna": {
+        "chainId": 5318007,
+        "txHash": "0xefd1ee2497c80d1ee7a27178df23fcc7cbce3abc7e435fa17c246a7ab62b302f",
+        "blockNumber": "8434036",
+        "timestampS": 1794773169,
+        "estimatedMs": 1794773169000,
+        "positionInSecond": 0,
+        "gasUsed": "74315",
+        "wallClockSeenMs": 1794773172343,
+        "event": "Skipped",
+        "n": "1794773167620",
+        "skipReason": 1,
+        "callbackRequestLogs": 0
+      },
+      "error": "RPC Request failed.\n\nStatus: 413\nURL: https://sepolia.base.org/\nRequest body: {\"method\":\"eth_getLogs\",\"params\":[{\"address\":\"0x4FD40A0C2e5Ef0e0f1681F7b2b648390a4F491F3\",\"topics\":[\"0x46d3b7d68bada996e0965bd77a6cb589b8ab5426c15ef540c5b9d1f4475dbc6b\",null,null,\"0xf45fd18c63cd3f053e3977672a323aced0389d8f2f4f9aa78362d6d610330ce5\"],\"fromBlock\":\"0x3882ea6\"}]}\n\nDetails: eth_getLogs is limited to a 200 range\nVersion: viem@2.57.13",
+      "latency": {
+        "wholeSecond": {
+          "originToLasnaS": 0
+        },
+        "estimatedSubSecond": {
+          "originToLasnaMs": -600
+        },
+        "wallClock": {
+          "originSeenToLasnaSeenMs": 2571
+        }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794773302328,
+        "callbacks": []
+      },
+      "noDestPostHoc": {
+        "scannedFromBlock": "59256504",
+        "scannedToBlock": "59257169",
+        "pingedTxs": []
+      }
+    },
+    {
+      "originChainId": 84532,
+      "originTxHash": "0x8fbb82ad9b12882bd8bbcc7ae310298fb6de585c87b22a91eb67f160d71af969",
+      "sentAtMs": 1794773183675,
+      "clockSkewS": {
+        "base": 0.2,
+        "unichain": -0.8,
+        "lasna": -0.8
+      },
+      "origin": {
+        "chainId": 84532,
+        "txHash": "0x8fbb82ad9b12882bd8bbcc7ae310298fb6de585c87b22a91eb67f160d71af969",
+        "blockNumber": "59256585",
+        "timestampS": 1794773185,
+        "estimatedMs": 1794773185800,
+        "positionInSecond": 4,
+        "gasUsed": "23386",
+        "wallClockSeenMs": 1794773186014
+      },
+      "lasna": {
+        "chainId": 5318007,
+        "txHash": "0x421d7459021674a39b218d1ad3df375b05316791fd212c9302ac702e030bafec",
+        "blockNumber": "8434051",
+        "timestampS": 1794773185,
+        "estimatedMs": 1794773185000,
+        "positionInSecond": 0,
+        "gasUsed": "74324",
+        "wallClockSeenMs": 1794773188676,
+        "event": "Skipped",
+        "n": "1794773183675",
+        "skipReason": 1,
+        "callbackRequestLogs": 0
+      },
+      "error": "RPC Request failed.\n\nStatus: 413\nURL: https://sepolia.base.org/\nRequest body: {\"method\":\"eth_getLogs\",\"params\":[{\"address\":\"0x4FD40A0C2e5Ef0e0f1681F7b2b648390a4F491F3\",\"topics\":[\"0x46d3b7d68bada996e0965bd77a6cb589b8ab5426c15ef540c5b9d1f4475dbc6b\",null,null,\"0x8fbb82ad9b12882bd8bbcc7ae310298fb6de585c87b22a91eb67f160d71af969\"],\"fromBlock\":\"0x3882ef6\"}]}\n\nDetails: eth_getLogs is limited to a 200 range\nVersion: viem@2.57.13",
+      "latency": {
+        "wholeSecond": {
+          "originToLasnaS": 0
+        },
+        "estimatedSubSecond": {
+          "originToLasnaMs": -800
+        },
+        "wallClock": {
+          "originSeenToLasnaSeenMs": 2662
+        }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794773304188,
+        "callbacks": []
+      },
+      "noDestPostHoc": {
+        "scannedFromBlock": "59256585",
+        "scannedToBlock": "59257178",
+        "pingedTxs": []
+      }
+    },
+    {
+      "originChainId": 84532,
+      "originTxHash": "0xdfe737091a94d3fa67c8f506e008fc0b67a30772b7dbb0613bed54b42c151a3e",
+      "sentAtMs": 1794773200069,
+      "clockSkewS": {
+        "base": -0.1,
+        "unichain": -1.1,
+        "lasna": -1.1
+      },
+      "origin": {
+        "chainId": 84532,
+        "txHash": "0xdfe737091a94d3fa67c8f506e008fc0b67a30772b7dbb0613bed54b42c151a3e",
+        "blockNumber": "59256666",
+        "timestampS": 1794773202,
+        "estimatedMs": 1794773202000,
+        "positionInSecond": 0,
+        "gasUsed": "23386",
+        "wallClockSeenMs": 1794773202052
+      },
+      "lasna": {
+        "chainId": 5318007,
+        "txHash": "0x01fd51a62b762ca22029d40eacad6873c36539c6248b4becec47fa801cd0ce48",
+        "blockNumber": "8434066",
+        "timestampS": 1794773201,
+        "estimatedMs": 1794773201000,
+        "positionInSecond": 0,
+        "gasUsed": "74324",
+        "wallClockSeenMs": 1794773203048,
+        "event": "Skipped",
+        "n": "1794773200069",
+        "skipReason": 1,
+        "callbackRequestLogs": 0
+      },
+      "error": "RPC Request failed.\n\nStatus: 413\nURL: https://sepolia.base.org/\nRequest body: {\"method\":\"eth_getLogs\",\"params\":[{\"address\":\"0x4FD40A0C2e5Ef0e0f1681F7b2b648390a4F491F3\",\"topics\":[\"0x46d3b7d68bada996e0965bd77a6cb589b8ab5426c15ef540c5b9d1f4475dbc6b\",null,null,\"0xdfe737091a94d3fa67c8f506e008fc0b67a30772b7dbb0613bed54b42c151a3e\"],\"fromBlock\":\"0x3882f47\"}]}\n\nDetails: eth_getLogs is limited to a 200 range\nVersion: viem@2.57.13",
+      "latency": {
+        "wholeSecond": {
+          "originToLasnaS": -1
+        },
+        "estimatedSubSecond": {
+          "originToLasnaMs": -1000
+        },
+        "wallClock": {
+          "originSeenToLasnaSeenMs": 996
+        }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794773305848,
+        "callbacks": []
+      },
+      "noDestPostHoc": {
+        "scannedFromBlock": "59256666",
+        "scannedToBlock": "59257187",
+        "pingedTxs": []
+      }
+    }
+  ]
+}

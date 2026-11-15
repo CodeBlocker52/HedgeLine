@@ -1,0 +1,72 @@
+{
+  "exp": "E1",
+  "runId": "2026-11-15T19-52-45-031Z",
+  "gapMs": 12000,
+  "results": [
+    {
+      "originChainId": 84532,
+      "originTxHash": "0xadf5d68d6bd19ab1be427954e14cfd6817d4b400898a6c1684e712b7434c50ea",
+      "sentAtMs": 1794772366115,
+      "origin": {
+        "chainId": 84532,
+        "txHash": "0xadf5d68d6bd19ab1be427954e14cfd6817d4b400898a6c1684e712b7434c50ea",
+        "blockNumber": "59252497",
+        "timestampS": 1794772368,
+        "estimatedMs": 1794772368200,
+        "positionInSecond": 1,
+        "gasUsed": "23374",
+        "wallClockSeenMs": 1794772368323
+      },
+      "lasna": {
+        "chainId": 5318007,
+        "txHash": "0x202bbcd59c2eb188e2575ede8051aaca030d0bb4bb84d89c07d8cb39748a5426",
+        "blockNumber": "8433282",
+        "timestampS": 1794772367,
+        "estimatedMs": 1794772367000,
+        "positionInSecond": 0,
+        "gasUsed": "88289",
+        "wallClockSeenMs": 1794772370781,
+        "event": "Relayed",
+        "n": "1794772366115"
+      },
+      "dest": {
+        "chainId": 84532,
+        "txHash": "0x96bfdb9cb24d2dc7861eac87cf3b7ec5c41a548e3a28c105c2af4f46bae590f9",
+        "blockNumber": "59252505",
+        "timestampS": 1794772369,
+        "estimatedMs": 1794772369800,
+        "positionInSecond": 4,
+        "gasUsed": "65690",
+        "wallClockSeenMs": 1794772372010,
+        "n": "1794772366115",
+        "pingedOriginTimestamp": "1794772368",
+        "pingedTimestamp": "1794772369"
+      },
+      "callbacksCheckedAtMs": 1794772548558,
+      "callbacks": [],
+      "error": "getCallbacks empty for a Relayed tx",
+      "latency": {
+        "wholeSecond": {
+          "originToLasnaS": -1,
+          "lasnaToDestS": 2,
+          "totalS": 1
+        },
+        "estimatedSubSecond": {
+          "originToLasnaMs": -1200,
+          "lasnaToDestMs": 2800,
+          "totalMs": 1600
+        },
+        "wallClock": {
+          "originSeenToLasnaSeenMs": 2458,
+          "lasnaSeenToDestSeenMs": 1229,
+          "originSeenToDestSeenMs": 3687,
+          "sentToDestSeenMs": 5895
+        }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794773292262,
+        "callbacks": []
+      }
+    }
+  ]
+}

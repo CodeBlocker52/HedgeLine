@@ -1,0 +1,364 @@
+{
+  "E1": {
+    "samples": 5,
+    "fullLoops": 5,
+    "wholeSecondTotalS": {
+      "median": 1,
+      "max": 2,
+      "values": [
+        2,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "estimatedSubSecondTotalMs": {
+      "median": 1400,
+      "max": 1800,
+      "values": [
+        1800,
+        1400,
+        1200,
+        1400,
+        1000
+      ]
+    },
+    "wallClockOriginSeenToLasnaSeenMs": {
+      "median": 1905,
+      "max": 2604,
+      "values": [
+        2604,
+        1905,
+        2353,
+        1039,
+        1871
+      ]
+    },
+    "wallClockLasnaSeenToDestSeenMs": {
+      "median": -609,
+      "max": 653,
+      "values": [
+        -642,
+        -667,
+        -609,
+        653,
+        -25
+      ]
+    },
+    "wallClockOriginSeenToDestSeenMs": {
+      "median": 1744,
+      "max": 1962,
+      "values": [
+        1962,
+        1238,
+        1744,
+        1692,
+        1846
+      ]
+    },
+    "wallClockSentToDestSeenMs": {
+      "median": 3945,
+      "max": 4084,
+      "values": [
+        4084,
+        3964,
+        3637,
+        3800,
+        3945
+      ]
+    },
+    "lasnaChainTsOriginToLasnaS": {
+      "median": -1,
+      "max": 0,
+      "values": [
+        0,
+        -1,
+        -1,
+        -1,
+        -1
+      ]
+    },
+    "lasnaChainTsLasnaToDestS": {
+      "median": 2,
+      "max": 2,
+      "values": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "reactGas": {
+      "median": 88289,
+      "max": 88301,
+      "values": [
+        88289,
+        88301,
+        88289,
+        88301,
+        88277
+      ]
+    },
+    "callbackTxGas": {
+      "median": 65702,
+      "max": 65702,
+      "values": [
+        65702,
+        65702,
+        65702,
+        65702,
+        65702
+      ]
+    }
+  },
+  "E2": {
+    "samples": 5,
+    "fullLoops": 5,
+    "wholeSecondTotalS": {
+      "median": 1,
+      "max": 2,
+      "values": [
+        1,
+        1,
+        1,
+        1,
+        2
+      ]
+    },
+    "estimatedSubSecondTotalMs": {
+      "median": 1400,
+      "max": 2000,
+      "values": [
+        1200,
+        1200,
+        1400,
+        1600,
+        2000
+      ]
+    },
+    "wallClockOriginSeenToLasnaSeenMs": {
+      "median": 3316,
+      "max": 4361,
+      "values": [
+        3498,
+        1958,
+        3316,
+        2706,
+        4361
+      ]
+    },
+    "wallClockLasnaSeenToDestSeenMs": {
+      "median": -435,
+      "max": 88,
+      "values": [
+        -435,
+        -582,
+        -380,
+        88,
+        -508
+      ]
+    },
+    "wallClockOriginSeenToDestSeenMs": {
+      "median": 2936,
+      "max": 3853,
+      "values": [
+        3063,
+        1376,
+        2936,
+        2794,
+        3853
+      ]
+    },
+    "wallClockSentToDestSeenMs": {
+      "median": 6977,
+      "max": 9208,
+      "values": [
+        9208,
+        6561,
+        7247,
+        5873,
+        6977
+      ]
+    },
+    "lasnaChainTsOriginToLasnaS": {
+      "median": -1,
+      "max": 0,
+      "values": [
+        -1,
+        -1,
+        -1,
+        -1,
+        0
+      ]
+    },
+    "lasnaChainTsLasnaToDestS": {
+      "median": 2,
+      "max": 2,
+      "values": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "reactGas": {
+      "median": 88265,
+      "max": 88277,
+      "values": [
+        88265,
+        88265,
+        88265,
+        88277,
+        88277
+      ]
+    },
+    "callbackTxGas": {
+      "median": 65678,
+      "max": 65690,
+      "values": [
+        65678,
+        65678,
+        65678,
+        65690,
+        65690
+      ]
+    }
+  },
+  "E3": {
+    "samples": 6,
+    "fullLoops": 6,
+    "wholeSecondTotalS": {
+      "median": 2,
+      "max": 3,
+      "values": [
+        2,
+        2,
+        2,
+        1,
+        2,
+        3
+      ]
+    },
+    "estimatedSubSecondTotalMs": {
+      "median": 2000,
+      "max": 2800,
+      "values": [
+        2000,
+        2200,
+        2000,
+        1800,
+        2000,
+        2800
+      ]
+    },
+    "wallClockOriginSeenToLasnaSeenMs": {
+      "median": 2213.5,
+      "max": 34653,
+      "values": [
+        1946,
+        34653,
+        2481,
+        1272,
+        1187,
+        2969
+      ]
+    },
+    "wallClockLasnaSeenToDestSeenMs": {
+      "median": 286,
+      "max": 782,
+      "values": [
+        640,
+        -581,
+        -553,
+        782,
+        746,
+        -68
+      ]
+    },
+    "wallClockOriginSeenToDestSeenMs": {
+      "median": 2320,
+      "max": 34072,
+      "values": [
+        2586,
+        34072,
+        1928,
+        2054,
+        1933,
+        2901
+      ]
+    },
+    "wallClockSentToDestSeenMs": {
+      "median": 4728,
+      "max": 36316,
+      "values": [
+        4978,
+        36316,
+        4124,
+        4478,
+        4392,
+        5419
+      ]
+    },
+    "lasnaChainTsOriginToLasnaS": {
+      "median": 0,
+      "max": 1,
+      "values": [
+        0,
+        0,
+        0,
+        -1,
+        0,
+        1
+      ]
+    },
+    "lasnaChainTsLasnaToDestS": {
+      "median": 2,
+      "max": 2,
+      "values": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "reactGas": {
+      "median": 90460,
+      "max": 90508,
+      "values": [
+        90436,
+        90472,
+        90448,
+        90508,
+        90448,
+        90496
+      ]
+    },
+    "callbackTxGas": {
+      "median": 65714,
+      "max": 65714,
+      "values": [
+        65714,
+        65714,
+        65714,
+        65714,
+        65714,
+        65702
+      ]
+    }
+  },
+  "E4": {
+    "samples": 5,
+    "skipped": 5,
+    "callbackRequestLogs": 0,
+    "pinged": 0,
+    "reactGas": {
+      "median": 74324,
+      "max": 74324
+    }
+  }
+}

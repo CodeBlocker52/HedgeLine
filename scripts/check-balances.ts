@@ -17,8 +17,17 @@ import {
 
 /** plan.md §8.3 rule 11: always keep at least this much Base Sepolia ETH for callback fees. */
 const BASE_CALLBACK_RESERVE = parseEther("0.02");
-/** Assumed gasUsed values for one react() — assumptions, not measurements (replace with M1 receipts). */
+/** Assumed gasUsed values for one react() (planning rows for heavier M3/M4 logic). */
 const ASSUMED_REACT_GAS = [50_000n, 100_000n, 200_000n, 400_000n];
+/**
+ * Measured in M1 (docs/reviews/M1.md): PingReactive balance diff across one reactive tx on Lasna at 100 gwei.
+ * The charge is LOWER than the docs formula with the receipt's gasUsed (0.0128474 vs 0.0188289 for 88,289 gas).
+ */
+const MEASURED_M1 = [
+  { route: "Ping relayed (1 callback)", receiptGasUsed: 88_289, chargedWei: 12_847_400_000_000_000n },
+  { route: "Swap relayed (1 callback)", receiptGasUsed: 90_436, chargedWei: 12_856_100_000_000_000n },
+  { route: "Ping skipped (no callback)", receiptGasUsed: 74_324, chargedWei: 11_316_600_000_000_000n },
+];
 /** Assumed gasUsed for one hedge callback on Base (assumption until M2 measures it). */
 const ASSUMED_CALLBACK_GAS = 300_000n;
 
@@ -72,6 +81,16 @@ console.table(
     "assumed react() gasUsed": g.toString(),
     "lREACT per reactive tx": formatEther(reactFee(g)),
     "txs covered by balance+reserves": (lreactBudget / reactFee(g)).toString(),
+  })),
+);
+
+console.log("Measured in M1 (PingReactive balance diff per reactive tx):");
+console.table(
+  MEASURED_M1.map((m) => ({
+    route: m.route,
+    "receipt gasUsed": m.receiptGasUsed,
+    "lREACT charged": formatEther(m.chargedWei),
+    "txs covered by balance+reserves": (lreactBudget / m.chargedWei).toString(),
   })),
 );
 

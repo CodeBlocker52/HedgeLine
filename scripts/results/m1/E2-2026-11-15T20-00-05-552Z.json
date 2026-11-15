@@ -1,0 +1,357 @@
+{
+  "exp": "E2",
+  "runId": "2026-11-15T20-00-05-552Z",
+  "gapMs": 12000,
+  "results": [
+    {
+      "originChainId": 1301,
+      "originTxHash": "0xfcb034f64d4210098af3d3faae85be3a71617b00ee251ee2653fadcf59f394d7",
+      "sentAtMs": 1794772808195,
+      "clockSkewS": {
+        "base": -0.6,
+        "unichain": -0.6,
+        "lasna": -1.6
+      },
+      "origin": {
+        "chainId": 1301,
+        "txHash": "0xfcb034f64d4210098af3d3faae85be3a71617b00ee251ee2653fadcf59f394d7",
+        "blockNumber": "67920386",
+        "timestampS": 1794772814,
+        "estimatedMs": 1794772814000,
+        "positionInSecond": 0,
+        "gasUsed": "23374",
+        "wallClockSeenMs": 1794772814340
+      },
+      "dest": {
+        "chainId": 84532,
+        "txHash": "0xc9364bf76ef09662b3dd29a1c7b03c08316869886fd355c80d3c33e5eeafe823",
+        "blockNumber": "59254732",
+        "timestampS": 1794772815,
+        "estimatedMs": 1794772815200,
+        "positionInSecond": 1,
+        "gasUsed": "65678",
+        "wallClockSeenMs": 1794772817403,
+        "n": "1794772808195",
+        "pingedOriginTimestamp": "1794772814",
+        "pingedTimestamp": "1794772815"
+      },
+      "lasna": {
+        "chainId": 5318007,
+        "txHash": "0x604738bd452d9c6e959e95d89bec1f9480659458355d885f7a2f13cef38f59ce",
+        "blockNumber": "8433703",
+        "timestampS": 1794772813,
+        "estimatedMs": 1794772813000,
+        "positionInSecond": 0,
+        "gasUsed": "88265",
+        "wallClockSeenMs": 1794772817838,
+        "event": "Relayed",
+        "n": "1794772808195",
+        "callbackRequestLogs": 1
+      },
+      "callbacks": [],
+      "callbacksCheckedAtMs": 1794772879635,
+      "latency": {
+        "wholeSecond": {
+          "originToLasnaS": -1,
+          "lasnaToDestS": 2,
+          "totalS": 1
+        },
+        "estimatedSubSecond": {
+          "originToLasnaMs": -1000,
+          "lasnaToDestMs": 2200,
+          "totalMs": 1200
+        },
+        "wallClock": {
+          "originSeenToLasnaSeenMs": 3498,
+          "lasnaSeenToDestSeenMs": -435,
+          "originSeenToDestSeenMs": 3063,
+          "sentToDestSeenMs": 9208
+        }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794773294859,
+        "callbacks": []
+      }
+    },
+    {
+      "originChainId": 1301,
+      "originTxHash": "0xe671c15083005f0fd22f460a49b4ae2d1713a2915be6a81fdb2abca2b67c8105",
+      "sentAtMs": 1794772828046,
+      "clockSkewS": {
+        "base": 0.3,
+        "unichain": -0.7,
+        "lasna": -1.7
+      },
+      "origin": {
+        "chainId": 1301,
+        "txHash": "0xe671c15083005f0fd22f460a49b4ae2d1713a2915be6a81fdb2abca2b67c8105",
+        "blockNumber": "67920404",
+        "timestampS": 1794772832,
+        "estimatedMs": 1794772832000,
+        "positionInSecond": 0,
+        "gasUsed": "23374",
+        "wallClockSeenMs": 1794772833231
+      },
+      "dest": {
+        "chainId": 84532,
+        "txHash": "0xd396bd93215b7ed6134996807d70a40f2a5eafc42bf8669bdaedc16efc3d5650",
+        "blockNumber": "59254822",
+        "timestampS": 1794772833,
+        "estimatedMs": 1794772833200,
+        "positionInSecond": 1,
+        "gasUsed": "65678",
+        "wallClockSeenMs": 1794772834607,
+        "n": "1794772828046",
+        "pingedOriginTimestamp": "1794772832",
+        "pingedTimestamp": "1794772833"
+      },
+      "lasna": {
+        "chainId": 5318007,
+        "txHash": "0x81680960958409b16762e254c88399e697b28760102be48aad9c61d5015aa978",
+        "blockNumber": "8433720",
+        "timestampS": 1794772831,
+        "estimatedMs": 1794772831000,
+        "positionInSecond": 0,
+        "gasUsed": "88265",
+        "wallClockSeenMs": 1794772835189,
+        "event": "Relayed",
+        "n": "1794772828046",
+        "callbackRequestLogs": 1
+      },
+      "callbacks": [],
+      "callbacksCheckedAtMs": 1794772896741,
+      "latency": {
+        "wholeSecond": {
+          "originToLasnaS": -1,
+          "lasnaToDestS": 2,
+          "totalS": 1
+        },
+        "estimatedSubSecond": {
+          "originToLasnaMs": -1000,
+          "lasnaToDestMs": 2200,
+          "totalMs": 1200
+        },
+        "wallClock": {
+          "originSeenToLasnaSeenMs": 1958,
+          "lasnaSeenToDestSeenMs": -582,
+          "originSeenToDestSeenMs": 1376,
+          "sentToDestSeenMs": 6561
+        }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794773295110,
+        "callbacks": []
+      }
+    },
+    {
+      "originChainId": 1301,
+      "originTxHash": "0xf966e6239d6628aeaf0fdd622ab1f5d228546224f86d00aae67697f14595401e",
+      "sentAtMs": 1794772846564,
+      "clockSkewS": {
+        "base": 0.4,
+        "unichain": -1.6,
+        "lasna": -1.6
+      },
+      "origin": {
+        "chainId": 1301,
+        "txHash": "0xf966e6239d6628aeaf0fdd622ab1f5d228546224f86d00aae67697f14595401e",
+        "blockNumber": "67920422",
+        "timestampS": 1794772850,
+        "estimatedMs": 1794772850000,
+        "positionInSecond": 0,
+        "gasUsed": "23374",
+        "wallClockSeenMs": 1794772850875
+      },
+      "lasna": {
+        "chainId": 5318007,
+        "txHash": "0xa3760b24fce3758649dacf4296943336b93e52ac9dcde4567f8ebc559daced13",
+        "blockNumber": "8433737",
+        "timestampS": 1794772849,
+        "estimatedMs": 1794772849000,
+        "positionInSecond": 0,
+        "gasUsed": "88265",
+        "wallClockSeenMs": 1794772854191,
+        "event": "Relayed",
+        "n": "1794772846564",
+        "callbackRequestLogs": 1
+      },
+      "dest": {
+        "chainId": 84532,
+        "txHash": "0x032ac8c270f408030efc4e6104d2dec97d954e4d1b0c361c8d08866344f73e0a",
+        "blockNumber": "59254913",
+        "timestampS": 1794772851,
+        "estimatedMs": 1794772851400,
+        "positionInSecond": 2,
+        "gasUsed": "65678",
+        "wallClockSeenMs": 1794772853811,
+        "n": "1794772846564",
+        "pingedOriginTimestamp": "1794772850",
+        "pingedTimestamp": "1794772851"
+      },
+      "callbacks": [],
+      "callbacksCheckedAtMs": 1794772916479,
+      "latency": {
+        "wholeSecond": {
+          "originToLasnaS": -1,
+          "lasnaToDestS": 2,
+          "totalS": 1
+        },
+        "estimatedSubSecond": {
+          "originToLasnaMs": -1000,
+          "lasnaToDestMs": 2400,
+          "totalMs": 1400
+        },
+        "wallClock": {
+          "originSeenToLasnaSeenMs": 3316,
+          "lasnaSeenToDestSeenMs": -380,
+          "originSeenToDestSeenMs": 2936,
+          "sentToDestSeenMs": 7247
+        }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794773295309,
+        "callbacks": []
+      }
+    },
+    {
+      "originChainId": 1301,
+      "originTxHash": "0xfe54fba60f0e65c790a8e90a2b4b124556f07f6187c9abdc9c2027cfe1a50d46",
+      "sentAtMs": 1794772865029,
+      "clockSkewS": {
+        "base": 0.3,
+        "unichain": -0.7,
+        "lasna": -1.7
+      },
+      "origin": {
+        "chainId": 1301,
+        "txHash": "0xfe54fba60f0e65c790a8e90a2b4b124556f07f6187c9abdc9c2027cfe1a50d46",
+        "blockNumber": "67920440",
+        "timestampS": 1794772868,
+        "estimatedMs": 1794772868000,
+        "positionInSecond": 0,
+        "gasUsed": "23374",
+        "wallClockSeenMs": 1794772868108
+      },
+      "lasna": {
+        "chainId": 5318007,
+        "txHash": "0xfbbb22622a325d937fcf0027327fe1c843db57b56288fc1bbaa3dfb80aba2674",
+        "blockNumber": "8433754",
+        "timestampS": 1794772867,
+        "estimatedMs": 1794772867000,
+        "positionInSecond": 0,
+        "gasUsed": "88277",
+        "wallClockSeenMs": 1794772870814,
+        "event": "Relayed",
+        "n": "1794772865029",
+        "callbackRequestLogs": 1
+      },
+      "dest": {
+        "chainId": 84532,
+        "txHash": "0xeeaeb1ee35cbdbff9af04f38088cfe92f24cae94b1c6d8eaf215ebb019f9ff65",
+        "blockNumber": "59255004",
+        "timestampS": 1794772869,
+        "estimatedMs": 1794772869600,
+        "positionInSecond": 3,
+        "gasUsed": "65690",
+        "wallClockSeenMs": 1794772870902,
+        "n": "1794772865029",
+        "pingedOriginTimestamp": "1794772868",
+        "pingedTimestamp": "1794772869"
+      },
+      "callbacks": [],
+      "callbacksCheckedAtMs": 1794772935070,
+      "latency": {
+        "wholeSecond": {
+          "originToLasnaS": -1,
+          "lasnaToDestS": 2,
+          "totalS": 1
+        },
+        "estimatedSubSecond": {
+          "originToLasnaMs": -1000,
+          "lasnaToDestMs": 2600,
+          "totalMs": 1600
+        },
+        "wallClock": {
+          "originSeenToLasnaSeenMs": 2706,
+          "lasnaSeenToDestSeenMs": 88,
+          "originSeenToDestSeenMs": 2794,
+          "sentToDestSeenMs": 5873
+        }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794773295576,
+        "callbacks": []
+      }
+    },
+    {
+      "originChainId": 1301,
+      "originTxHash": "0x5624039c8041462ab2a70de89a82bd918ec6d626b54323f7510f7b58669251f8",
+      "sentAtMs": 1794772881429,
+      "clockSkewS": {
+        "base": 0.5,
+        "unichain": -1.5,
+        "lasna": -1.5
+      },
+      "origin": {
+        "chainId": 1301,
+        "txHash": "0x5624039c8041462ab2a70de89a82bd918ec6d626b54323f7510f7b58669251f8",
+        "blockNumber": "67920457",
+        "timestampS": 1794772885,
+        "estimatedMs": 1794772885000,
+        "positionInSecond": 0,
+        "gasUsed": "23374",
+        "wallClockSeenMs": 1794772884553
+      },
+      "dest": {
+        "chainId": 84532,
+        "txHash": "0x15ab59a4dc8c6301046820b2b9d02629230c56b6a21573cb41a2a62d23129668",
+        "blockNumber": "59255091",
+        "timestampS": 1794772887,
+        "estimatedMs": 1794772887000,
+        "positionInSecond": 0,
+        "gasUsed": "65690",
+        "wallClockSeenMs": 1794772888406,
+        "n": "1794772881429",
+        "pingedOriginTimestamp": "1794772885",
+        "pingedTimestamp": "1794772887"
+      },
+      "lasna": {
+        "chainId": 5318007,
+        "txHash": "0x7e885c73dc55ea92367b6776579c5b15d89103356da5a5a153da3c006fbb6f34",
+        "blockNumber": "8433770",
+        "timestampS": 1794772885,
+        "estimatedMs": 1794772885000,
+        "positionInSecond": 0,
+        "gasUsed": "88277",
+        "wallClockSeenMs": 1794772888914,
+        "event": "Relayed",
+        "n": "1794772881429",
+        "callbackRequestLogs": 1
+      },
+      "callbacks": [],
+      "callbacksCheckedAtMs": 1794772950640,
+      "latency": {
+        "wholeSecond": {
+          "originToLasnaS": 0,
+          "lasnaToDestS": 2,
+          "totalS": 2
+        },
+        "estimatedSubSecond": {
+          "originToLasnaMs": 0,
+          "lasnaToDestMs": 2000,
+          "totalMs": 2000
+        },
+        "wallClock": {
+          "originSeenToLasnaSeenMs": 4361,
+          "lasnaSeenToDestSeenMs": -508,
+          "originSeenToDestSeenMs": 3853,
+          "sentToDestSeenMs": 6977
+        }
+      },
+      "callbacksRecheck": {
+        "checkedAtMs": 1794773296029,
+        "callbacks": []
+      }
+    }
+  ]
+}
