@@ -48,3 +48,10 @@ export function rpcUrl(envName: string, fallback: string): string {
   const v = process.env[envName];
   return v && v.length > 0 ? v : fallback;
 }
+
+/** Fee parameters exposed by the system contract and callback proxies (docs/research/economy.md). */
+export const feeParamsAbi = [
+  { type: "function", name: "_gasPriceCoeffPer1000", stateMutability: "view", inputs: [], outputs: [{ type: "uint256" }] },
+  { type: "function", name: "_extraGas", stateMutability: "view", inputs: [], outputs: [{ type: "uint256" }] },
+  { type: "function", name: "_maxChargeGas", stateMutability: "view", inputs: [], outputs: [{ type: "uint256" }] },
+] as const;

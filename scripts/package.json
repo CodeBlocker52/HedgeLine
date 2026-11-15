@@ -9,7 +9,8 @@
   },
   "scripts": {
     "check-balances": "node --env-file=../.env check-balances.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "block-time": "node --env-file=../.env block-time.ts"
   },
   "dependencies": {
     "viem": "2.57.13"

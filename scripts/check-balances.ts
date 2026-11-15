@@ -1,9 +1,26 @@
-// Prints the deployer's balances on all three chains plus its reserves/debt on the Lasna system contract.
+// Prints the deployer's balances on all three chains, its reserves/debt on the Lasna system contract,
+// the estimated lREACT cost per reactive tx (from live gas price + system params), and budget checks.
 // Read-only: sends no transactions. Never prints PRIVATE_KEY.
 // Usage: npm run check-balances   (loads ../.env via node --env-file)
-import { createPublicClient, formatEther, http, isAddress, type Address } from "viem";
+import { createPublicClient, formatEther, http, isAddress, parseEther, type Address } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { SYSTEM_CONTRACT, baseSepolia, lasna, payableAbi, rpcUrl, unichainSepolia } from "./lib/chains.ts";
+import {
+  CALLBACK_PROXY,
+  SYSTEM_CONTRACT,
+  baseSepolia,
+  feeParamsAbi,
+  lasna,
+  payableAbi,
+  rpcUrl,
+  unichainSepolia,
+} from "./lib/chains.ts";
+
+/** plan.md §8.3 rule 11: always keep at least this much Base Sepolia ETH for callback fees. */
+const BASE_CALLBACK_RESERVE = parseEther("0.02");
+/** Assumed gasUsed values for one react() — assumptions, not measurements (replace with M1 receipts). */
+const ASSUMED_REACT_GAS = [50_000n, 100_000n, 200_000n, 400_000n];
+/** Assumed gasUsed for one hedge callback on Base (assumption until M2 measures it). */
+const ASSUMED_CALLBACK_GAS = 300_000n;
 
 function deployer(): Address {
   const explicit = process.env.DEPLOYER_ADDRESS;
@@ -18,28 +35,56 @@ const uni = createPublicClient({ chain: unichainSepolia, transport: http(rpcUrl(
 const base = createPublicClient({ chain: baseSepolia, transport: http(rpcUrl("BASE_SEPOLIA_RPC", "https://sepolia.base.org")) });
 const rnk = createPublicClient({ chain: lasna, transport: http(rpcUrl("LASNA_RPC", "https://lasna-rpc.rnk.dev/")) });
 
-async function settle<T>(p: Promise<T>): Promise<string> {
-  try {
-    const v = await p;
-    return typeof v === "bigint" ? formatEther(v) : String(v);
-  } catch (e) {
-    return `error: ${(e as Error).message.split("\n")[0]}`;
-  }
-}
+const fee = (client: typeof rnk | typeof base, address: Address) =>
+  Promise.all([
+    client.readContract({ address, abi: feeParamsAbi, functionName: "_gasPriceCoeffPer1000" }),
+    client.readContract({ address, abi: feeParamsAbi, functionName: "_extraGas" }),
+    client.getGasPrice(),
+  ]);
 
-const [uniEth, baseEth, lreact, debt, reserves] = await Promise.all([
-  settle(uni.getBalance({ address: who })),
-  settle(base.getBalance({ address: who })),
-  settle(rnk.getBalance({ address: who })),
-  settle(rnk.readContract({ address: SYSTEM_CONTRACT, abi: payableAbi, functionName: "debt", args: [who] })),
-  settle(rnk.readContract({ address: SYSTEM_CONTRACT, abi: payableAbi, functionName: "reserves", args: [who] })),
+const [uniEth, baseEth, lreact, debt, reserves, [lCoeff, lExtra, lGasPrice], [bCoeff, bExtra, bGasPrice]] = await Promise.all([
+  uni.getBalance({ address: who }),
+  base.getBalance({ address: who }),
+  rnk.getBalance({ address: who }),
+  rnk.readContract({ address: SYSTEM_CONTRACT, abi: payableAbi, functionName: "debt", args: [who] }),
+  rnk.readContract({ address: SYSTEM_CONTRACT, abi: payableAbi, functionName: "reserves", args: [who] }),
+  fee(rnk, SYSTEM_CONTRACT),
+  fee(base, CALLBACK_PROXY[baseSepolia.id]),
 ]);
 
-console.log(`Deployer: ${who}`);
+console.log(`Deployer: ${who}\n`);
 console.table([
-  { chain: "Unichain Sepolia (1301)", item: "balance", amount: uniEth, unit: "ETH" },
-  { chain: "Base Sepolia (84532)", item: "balance", amount: baseEth, unit: "ETH" },
-  { chain: "Reactive Lasna (5318007)", item: "balance", amount: lreact, unit: "lREACT" },
-  { chain: "Reactive Lasna (5318007)", item: "system debt", amount: debt, unit: "lREACT" },
-  { chain: "Reactive Lasna (5318007)", item: "system reserves", amount: reserves, unit: "lREACT" },
+  { chain: "Unichain Sepolia (1301)", item: "balance", amount: formatEther(uniEth), unit: "ETH" },
+  { chain: "Base Sepolia (84532)", item: "balance", amount: formatEther(baseEth), unit: "ETH" },
+  { chain: "Reactive Lasna (5318007)", item: "balance", amount: formatEther(lreact), unit: "lREACT" },
+  { chain: "Reactive Lasna (5318007)", item: "system debt", amount: formatEther(debt), unit: "lREACT" },
+  { chain: "Reactive Lasna (5318007)", item: "system reserves", amount: formatEther(reserves), unit: "lREACT" },
 ]);
+
+// fee = gasPrice × coeff/1000 × (gasUsed + _extraGas)   (docs/research/economy.md › Fee Model)
+const reactFee = (gasUsed: bigint) => (lGasPrice * lCoeff * (gasUsed + lExtra)) / 1000n;
+const lreactBudget = lreact + reserves;
+console.log(
+  `\nLasna reactive tx cost (ESTIMATE): gasPrice ${lGasPrice} wei × coeff ${lCoeff}/1000 × (gasUsed + _extraGas ${lExtra})`,
+);
+console.table(
+  ASSUMED_REACT_GAS.map((g) => ({
+    "assumed react() gasUsed": g.toString(),
+    "lREACT per reactive tx": formatEther(reactFee(g)),
+    "txs covered by balance+reserves": (lreactBudget / reactFee(g)).toString(),
+  })),
+);
+
+const cbFee = (bGasPrice * bCoeff * (ASSUMED_CALLBACK_GAS + bExtra)) / 1000n;
+console.log(
+  `Base callback cost (ESTIMATE, assumed ${ASSUMED_CALLBACK_GAS} gasUsed): ${formatEther(cbFee)} ETH ` +
+    `(gasPrice ${bGasPrice} wei × coeff ${bCoeff}/1000 × (gasUsed + _extraGas ${bExtra}))`,
+);
+
+const spendableBase = baseEth > BASE_CALLBACK_RESERVE ? baseEth - BASE_CALLBACK_RESERVE : 0n;
+const ok = baseEth >= BASE_CALLBACK_RESERVE && debt === 0n;
+console.log(`\nBudget checks (plan.md §8.3 rule 11):`);
+console.log(`  Base Sepolia ≥ 0.02 ETH callback reserve: ${baseEth >= BASE_CALLBACK_RESERVE ? "OK" : "FAIL"} (spendable above reserve: ${formatEther(spendableBase)} ETH)`);
+console.log(`  Lasna system debt == 0: ${debt === 0n ? "OK" : "FAIL"}`);
+console.log(`  Per-step deploy cap: 0.01 ETH (enforced before each deploy)`);
+if (!ok) process.exitCode = 1;
