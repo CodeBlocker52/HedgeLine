@@ -11,7 +11,7 @@ Hard rule: every address, tx hash, latency, count or other number you write must
 Cite the source file in a comment or footnote. If a value is missing, leave the `TODO` and list it in your report. Never estimate.
 
 Other rules:
-- Don't touch `contracts/`, `scripts/*.ts`, `Plan.md` or `.env`.
+- Don't touch `contracts/`, `scripts/*.ts`, `plan.md` or `.env`.
 - Explorer links: Lasna https://lasna.reactscan.net, Unichain Sepolia https://sepolia.uniscan.xyz, Base Sepolia https://sepolia.basescan.org.
 - Keep the README's existing structure and voice; plain, short sentences.
 - Report: what you changed, which sources each number came from, and which TODOs remain.

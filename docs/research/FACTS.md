@@ -1,4 +1,4 @@
-# FACTS — Plan.md §2 re-verified (2026-11-16)
+# FACTS — plan.md §2 re-verified (2026-11-16)
 
 Legend: ✅ confirmed · ❌ changed (new value given) · ❓ couldn't verify yet (and when we will).
 Sources: **D** = live docs captured in `docs/research/*.md` (fetched 2026-11-16) · **L** = `lib/reactive-lib-omni` v0.1.0 source ·
@@ -7,7 +7,7 @@ Sources: **D** = live docs captured in `docs/research/*.md` (fetched 2026-11-16)
 
 ## Summary — nothing core changed
 
-**No ❌ on any core fact** (addresses, API names, payload rules all match Plan.md §2). Open items:
+**No ❌ on any core fact** (addresses, API names, payload rules all match plan.md §2). Open items:
 
 - ❓ Lasna EVM version under a *real deployment* — `eth_call` shows Cancun opcodes work (PUSH0, TSTORE/TLOAD, MCOPY); `BLOBBASEFEE` crashes the RPC handler. Confirm with the M1 deploy.
 - ❓ End-to-end latency per hop — M1.
@@ -115,7 +115,7 @@ event Swap(PoolId indexed id, address indexed sender, int128 amount0, int128 amo
 | Base PoolManager `Swap` reaches Lasna with `topic1 = poolId` | ❓ | M1 step 3 |
 | Callback proxy `_extraGas` / `_maxChargeGas` on Base Sepolia | ✅ resolved | C — see below |
 
-## ➕ New facts (not in Plan.md)
+## ➕ New facts (not in plan.md)
 
 | Item | Value | Source |
 |---|---|---|

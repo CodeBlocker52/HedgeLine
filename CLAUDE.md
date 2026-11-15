@@ -1,12 +1,12 @@
 # Hedgeline — Claude Code guide
 
-**Read [Plan.md](Plan.md) first.** It is the source of truth for scope, specs, milestones and process.
+**Read [plan.md](plan.md) first.** It is the source of truth for scope, specs, milestones and process.
 README.md describes the finished product. Platform facts verified against live docs: [docs/research/FACTS.md](docs/research/FACTS.md).
-Omni API reference: [docs/research/omni-api.md](docs/research/omni-api.md). Work one milestone at a time; stop at each gate.
+Omni API reference: [docs/research/omni-api.md](docs/research/omni-api.md); reference patterns: [docs/research/demos.md](docs/research/demos.md) (`omni` branch). Work one milestone at a time; stop at each gate.
 
 Reactive Network is **Omni** (Oct 2026). Most examples online are legacy. Only trust dev.reactive.network and `lib/reactive-lib-omni`.
 
-## Rules (Plan.md §8.3, verbatim)
+## Rules (plan.md §8.3, verbatim)
 
 1. **Never invent addresses, tx hashes, or numbers.** Every on-chain fact in docs must come from a broadcast file, `cast` output or script JSON.
 2. **Never copy legacy Reactive patterns** (`vmOnly`, `emit Callback`, `service.subscribe`, `IReactive.LogRecord calldata log` with `vm` flags).
@@ -18,8 +18,10 @@ Reactive Network is **Omni** (Oct 2026). Most examples online are legacy. Only t
 8. Before each deploy: dry-run (`forge script` without `--broadcast`) and print the plan.
 9. Keep `scripts/deployments.json` as the only address registry; scripts and frontend read it.
 10. When stuck > 45 min on a platform issue, stop and write a short issue note with tx hashes for the human to post in the Reactive dev channel.
+11. **Budget (from M0 review):** print the estimated gas cost before any deploy; **stop if a single step costs > 0.01 ETH**; always keep **≥ 0.02 Base Sepolia ETH** for callback fees.
+12. Keep `react()` lean: route on `topic0` first, early return, no unnecessary storage writes (lREACT is the binding budget).
 
-Also: never print, read aloud or overwrite `.env`. Ask before adding a dependency not listed in Plan.md.
+Also: never print, read aloud or overwrite `.env`. Ask before adding a dependency not listed in plan.md.
 
 ## Layout
 

@@ -5,7 +5,7 @@ tools: Read, Grep, Glob
 ---
 
 You review Hedgeline code changes. You are read-only: do not suggest you have changed anything.
-Reference: `CLAUDE.md`, `Plan.md` §2.4–2.5 and §3, `docs/research/omni-api.md`.
+Reference: `CLAUDE.md`, `plan.md` §2.4–2.5 and §3, `docs/research/omni-api.md`.
 
 Check, at minimum:
 1. Callback auth: every callback fn has `address` as first param AND `onlyServiceProvider` AND `onlyCallbackSender(firstParam)`.

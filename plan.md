@@ -177,7 +177,8 @@ HedgelineVault (v4 hook)  ──S1──▶ HedgelineReactive ──applyHedge�
 ### 3.2 Tokens
 
 - Deploy `TestToken` (Solady ERC20, public `mint` capped per call) as **tWETH (18 dec)** and **tUSDC (6 dec)** on **both** Unichain Sepolia and Base Sepolia.
-- **Pool orientation must be identical on both chains** (same token0/token1 meaning and decimals) so one `sqrtPriceX96` means the same price everywhere. Enforce in deploy scripts: if address sort order differs, redeploy tokens until `tWETH < tUSDC` (or vice versa) consistently, or carry an `invertedPair` flag through the math. **Prefer consistent ordering**, it removes a whole bug class.
+- **Pool orientation must be identical on both chains** (same token0/token1 meaning and decimals) so one `sqrtPriceX96` means the same price everywhere.
+- **Decided (M0 review): deploy both tokens with CREATE2** through the deterministic deployer `0x4e59b44847b379578588920ca78fbf26c0b4956c` (present on Base Sepolia and Unichain Sepolia), **same salt + same init code on both chains**. The deploy script must assert that (a) each token's address is identical on both chains and (b) the token0/token1 order is the same on both, and **revert otherwise**. No `invertedPair` flag.
 
 ### 3.3 `HedgelineVault` (Unichain Sepolia) — v4 hook + LP vault
 
@@ -198,7 +199,7 @@ event PositionUpdated(
     uint64  nonce,          // monotonic per vault
     uint256 timestamp       // block.timestamp, for latency
 );
-event PoolPriceUpdated(uint160 sqrtPriceX96, uint64 nonce, uint256 timestamp); // from afterSwap
+event PoolPriceUpdated(uint160 sqrtPriceX96, uint64 nonce, uint256 timestamp); // from afterSwap — dashboard/diagnostics only, NOT subscribed by the reactive contract
 ```
 
 Keep scope tight: **no** directional fee, **no** fee compounding, **no** rebalancing ranges. Fees accrue in the pool and are collected on withdraw.
@@ -296,7 +297,7 @@ address hedger; // set after hedger deploy (owner-only setter)
 ```
 
 Subscriptions (constructor, plus owner-only re-subscribe helpers):
-- S1: `(1301, vault, PositionUpdated topic0, IGNORE, IGNORE, IGNORE)` and `(1301, vault, PoolPriceUpdated topic0, …)`
+- S1: `(1301, vault, PositionUpdated topic0, IGNORE, IGNORE, IGNORE)` **only**. (Decided in M0 review: no subscription to `PoolPriceUpdated` — every Unichain swap would cost a reactive tx; the external price comes from S2.)
 - S2: `(84532, basePoolManager, Swap topic0, uint256(poolId), IGNORE, IGNORE)`
 - S3: `(84532, miniPerp, PositionChanged topic0, uint256(uint160(hedger)), IGNORE, IGNORE)` and same for `CollateralChanged`
   (topic1 = indexed account = hedger, so we only see our own position)
@@ -319,6 +320,8 @@ Subscriptions (constructor, plus owner-only re-subscribe helpers):
 - Debounce: don't fire `protectMargin` again until a `PositionChanged`/`CollateralChanged` arrives or N seconds pass (use the vault/hook timestamps; LogRecord has no timestamp — use `block.timestamp` on Lasna for debounce, it's fine here).
 
 Gas: must stay well under the **900k** reactive gas cap — 2 ranges is trivial; still add a gas test.
+
+Keep `react()` lean (lREACT is the binding budget: Lasna fee = gasPrice × coeff/1000 × (gasUsed + 100k `_extraGas`)): route on `topic0` first, early-return on anything unmatched, check `opCode` before decoding, and skip storage writes that don't change state.
 
 Also emit diagnostic events on Lasna (`Decision(...)`) — they make Reactscan readable in the demo.
 
@@ -410,6 +413,7 @@ Each milestone ends with: all tests green, `docs/reviews/Mx.md` written (see §8
 - S3 mirror, `marginCheck`, `protectMargin` (STEP_DOWN, CUT, TOP_UP), debounce.
 - `scenarios.ts` runs all 5 scenarios in sequence and writes results JSON.
 - `latency.ts` (median/p95/max per trigger, ≥ 20 samples each) and `simulate-lag.ts` (measured vs 7 s replay on the same price path).
+  - `latency.ts` adds **block-position offsets** (`scripts/lib/blocktime.ts`): Base Sepolia `block.timestamp` is whole seconds shared by ~5 blocks, so time ≈ `ts + blockTime × (block − first block with that ts)`. Output columns using it are labelled **"estimated sub-second"**; whole-second chain-timestamp latency is reported alongside, and the wall-clock receipt watcher (`watch.ts`) stays as a cross-check.
 - **Accept:** scenario **5** on testnet; latency + hedge-error tables filled in README from script output.
 
 ### M5 — Dashboard (Nov 26–28)
@@ -479,6 +483,8 @@ Each milestone ends with: all tests green, `docs/reviews/Mx.md` written (see §8
 8. Before each deploy: dry-run (`forge script` without `--broadcast`) and print the plan.
 9. Keep `scripts/deployments.json` as the only address registry; scripts and frontend read it.
 10. When stuck > 45 min on a platform issue, stop and write a short issue note with tx hashes for the human to post in the Reactive dev channel.
+11. **Budget (from M0 review):** print the estimated gas cost before any deploy; **stop if a single step costs > 0.01 ETH**; always keep **≥ 0.02 Base Sepolia ETH** for callback fees.
+12. Keep `react()` lean: route on `topic0` first, early return, no unnecessary storage writes (lREACT is the binding budget).
 
 ---
 

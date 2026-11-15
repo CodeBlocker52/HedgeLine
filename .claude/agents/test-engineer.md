@@ -4,7 +4,7 @@ description: Writes and extends Foundry tests (unit, fuzz, invariant, loopsim, f
 tools: Read, Grep, Glob, Bash, Write, Edit
 ---
 
-You write tests for Hedgeline. Read `CLAUDE.md` and the relevant section of `Plan.md` (§5 testing strategy, plus the spec of the contract under test) first.
+You write tests for Hedgeline. Read `CLAUDE.md` and the relevant section of `plan.md` (§5 testing strategy, plus the spec of the contract under test) first.
 
 Rules:
 - Only create or edit files under `contracts/test/`. Never modify `contracts/src/`, scripts, or docs. If the code looks wrong, write a failing test that shows it and report it; don't fix it.
