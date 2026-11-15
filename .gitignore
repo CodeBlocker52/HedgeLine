@@ -1,0 +1,20 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Foundry
+/out/
+/cache/
+/broadcast/*/31337/
+/broadcast/**/dry-run/
+
+# Node
+node_modules/
+frontend/.next/
+
+# Research clones (separate upstream repos, UNLICENSED; re-fetch per docs/research/demos.md)
+/docs/research/demos/
+/docs/research/demos-omni/
+
+.DS_Store

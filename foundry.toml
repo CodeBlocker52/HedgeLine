@@ -1,0 +1,64 @@
+# Hedgeline Foundry config. See docs/reviews/M0.md for why these versions were chosen.
+
+[profile.default]
+src = "contracts/src"
+test = "contracts/test"
+script = "contracts/script"
+out = "out"
+libs = ["lib"]
+cache_path = "cache"
+broadcast = "broadcast"
+
+# Compiler. reactive-lib-omni requires ^0.8.29, while v4-core's PoolManager.sol is pinned to =0.8.26.
+# auto_detect_solc lets forge compile each import graph with a matching compiler; deployable sources
+# and scripts are pinned below so their bytecode is reproducible for verification. Tests may pull in
+# PoolManager under 0.8.26 (see contracts/test/utils/V4Artifacts.sol).
+auto_detect_solc = true
+compilation_restrictions = [
+  { paths = "contracts/src/**", version = "=0.8.30" },
+  { paths = "contracts/script/**", version = "=0.8.30" },
+]
+optimizer = true
+optimizer_runs = 200
+via_ir = false
+bytecode_hash = "none"
+# Cancun: needed by v4-core (transient storage). Probed on Lasna/Base/Unichain via eth_call (PUSH0, TSTORE/TLOAD, MCOPY ok).
+# Foundry 1.9 defaults to "osaka" - never rely on the default.
+evm_version = "cancun"
+
+fs_permissions = [{ access = "read-write", path = "./scripts/deployments.json" }, { access = "read", path = "./out" }]
+
+[profile.default.fuzz]
+runs = 256
+
+[profile.default.invariant]
+runs = 64
+depth = 64
+
+# Reactive contracts deployed to Lasna. Same as default today; exists so the reactive contract can be
+# compiled with a lower evm_version (e.g. "shanghai") if M1 deploys show a Lasna opcode mismatch.
+# Usage: FOUNDRY_PROFILE=lasna forge script contracts/script/03_DeployReactive.s.sol --rpc-url lasna
+[profile.lasna]
+src = "contracts/src"
+test = "contracts/test"
+script = "contracts/script"
+evm_version = "cancun"
+
+[profile.ci]
+src = "contracts/src"
+test = "contracts/test"
+script = "contracts/script"
+evm_version = "cancun"
+
+[profile.ci.fuzz]
+runs = 1000
+
+[rpc_endpoints]
+unichain_sepolia = "${UNICHAIN_SEPOLIA_RPC}"
+base_sepolia = "${BASE_SEPOLIA_RPC}"
+lasna = "${LASNA_RPC}"
+
+[fmt]
+line_length = 120
+tab_width = 4
+bracket_spacing = true
